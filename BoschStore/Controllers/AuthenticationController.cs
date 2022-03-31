@@ -31,7 +31,6 @@ namespace CIPTool.Controllers
             currentUser = this.httpContextAccessor.HttpContext.User.Identity.Name[5..];
         }
 
-
         [DisableCors]
         [AllowAnonymous]
         [HttpGet("login")]
@@ -45,15 +44,15 @@ namespace CIPTool.Controllers
             }
 
             var group = LdapWrapper.GetDepartmentByUserName(currentUser);
-          
+
             loggedUser = new UserDto
-                {
-                    Username = currentUser,
-                    Name = LdapWrapper.GetFirstNameByUsername(currentUser) + " " + LdapWrapper.GetLastNameByUsername(currentUser),
-                    Email = LdapWrapper.GetEmailAddressByUserName(currentUser),
-                    RoleType = RoleType.Associate,
-                    Group = group,
-                };
+            {
+                Username = currentUser,
+                Name = LdapWrapper.GetFirstNameByUsername(currentUser) + " " + LdapWrapper.GetLastNameByUsername(currentUser),
+                Email = LdapWrapper.GetEmailAddressByUserName(currentUser),
+                RoleType = RoleType.Associate,
+                Group = group,
+            };
 
             await userService.AddUserAsync(loggedUser);
 

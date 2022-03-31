@@ -1,11 +1,8 @@
 ﻿using BusinessLogicLayer.Interfaces;
 using BusinessObjectLayer.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -26,7 +23,6 @@ namespace BoschStore.Controllers
             productService = _productService;
         }
 
-         
         [HttpPost]
         [Route("AddProduct")]
         public async Task<ActionResult> AddProduct([FromBody] ProductDto product)
@@ -63,7 +59,7 @@ namespace BoschStore.Controllers
         public async Task<ActionResult> GetProductById([FromQuery] int productId)
         {
             var product = await productService.GetProductByIdAsync(productId);
-            if (product == null )
+            if (product == null)
             {
                 return NotFound();
             }
@@ -137,7 +133,7 @@ namespace BoschStore.Controllers
             {
                 var file = Request.Form.Files[0];
                 var folderName = Path.Combine("Resources", "Images", productTitle);
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName).Replace(" ", String.Empty);
 
                 if (!Directory.Exists(pathToSave))
                 {
@@ -147,7 +143,7 @@ namespace BoschStore.Controllers
                 if (file.Length > 0)
                 {
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var fullPath = Path.Combine(pathToSave, fileName);
+                    var fullPath = Path.Combine(pathToSave, fileName).Replace(" ", String.Empty);
                     var dbPath = Path.Combine(folderName, fileName);
                     using var stream = new FileStream(fullPath, FileMode.Create);
                     file.CopyTo(stream);
@@ -164,10 +160,10 @@ namespace BoschStore.Controllers
                 return StatusCode(500, $"Internal server error: {ex}");
             }
         }
-       
+
         [HttpDelete]
         [Route("DeleteImageByImageName")]
-        public async Task<IActionResult> DeleteImage([FromQuery]string imageName)
+        public async Task<IActionResult> DeleteImage([FromQuery] string imageName)
         {
 
             var folderName = Path.Combine("Resources", "Images");
@@ -207,7 +203,7 @@ namespace BoschStore.Controllers
         [Route("DeleteProduct")]
         public async Task<IActionResult> DeleteProduct([FromQuery] int productId)
         {
-            if(productId == 0)
+            if (productId == 0)
             {
                 ModelState.AddModelError(string.Empty, "Product object sent from client is null");
                 return BadRequest("Product object is null");
@@ -217,5 +213,4 @@ namespace BoschStore.Controllers
         }
 
     }
-
 }

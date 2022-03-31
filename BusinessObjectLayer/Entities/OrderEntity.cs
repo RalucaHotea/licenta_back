@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BusinessObjectLayer.Entities
 {
     [Table("Orders")]
-    public class OrderEntity 
+    public class OrderEntity
     {
         [Key]
         public int Id { get; set; }

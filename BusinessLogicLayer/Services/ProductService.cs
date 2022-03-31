@@ -4,6 +4,7 @@ using BusinessObjectLayer.Dtos;
 using BusinessObjectLayer.Entities;
 using DataAccessLayer.Interfaces;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -45,10 +46,23 @@ namespace BusinessLogicLayer.Services
 
         public async Task DeleteProductAsync(int productId)
         {
-            
+
             var productToDelete = await productRepository.GetProductById(productId);
-            if(productToDelete != null)
+
+            if (productToDelete != null)
             {
+                var folderName = Path.Combine("Resources", "Images");
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                var fullPath = Path.Combine(folderPath, productToDelete.Name);
+
+                if (Directory.Exists(fullPath))
+                {
+                    foreach (var item in System.IO.Directory.GetFiles(fullPath))
+                    {
+                        System.IO.File.Delete(item);
+                    }
+
+                }
                 await productRepository.DeleteProductAsync(productToDelete);
             }
         }
@@ -80,7 +94,7 @@ namespace BusinessLogicLayer.Services
         {
             var product = await productRepository.GetProductById(productId);
             return mapper.Map<ProductEntity, ProductDto>(product);
-            
+
         }
 
         public async Task<List<SubcategoryDto>> GetAllSubcategoriesByCategoryIdAsync(int categoryId)

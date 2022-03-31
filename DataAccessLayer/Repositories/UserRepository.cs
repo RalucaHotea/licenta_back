@@ -1,5 +1,4 @@
-﻿using BusinessObjectLayer.Dtos;
-using BusinessObjectLayer.Entities;
+﻿using BusinessObjectLayer.Entities;
 using DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -27,7 +26,5 @@ namespace DataAccessLayer.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Username == username);
         }
-
-        
     }
 }

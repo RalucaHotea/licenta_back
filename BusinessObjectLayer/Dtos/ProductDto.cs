@@ -1,7 +1,4 @@
-﻿using BusinessObjectLayer.Entities;
-using System.Collections.Generic;
-
-namespace BusinessObjectLayer.Dtos
+﻿namespace BusinessObjectLayer.Dtos
 {
     public class ProductDto
     {
@@ -20,7 +17,7 @@ namespace BusinessObjectLayer.Dtos
 
         public float Price { get; set; }
 
-        public string ImagePath{ get; set; }
+        public string ImagePath { get; set; }
 
     }
 }
