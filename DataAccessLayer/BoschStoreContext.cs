@@ -1,5 +1,4 @@
-﻿
-using BusinessObjectLayer.Entities;
+﻿using BusinessObjectLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer

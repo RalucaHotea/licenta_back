@@ -23,4 +23,9 @@
     <ProjectReference Include="..\BusinessObjectLayer\BusinessObjectLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Images\bormasina\bbvb\" />
+    <Folder Include="Resources\Images\bormasina\" />
+  </ItemGroup>
+
 </Project>
