@@ -4,43 +4,22 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(BoschStoreContext))]
-    partial class BoschStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20220405110758_AddedDraft")]
+    partial class AddedDraft
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("BusinessObjectLayer.Entities.CartItemEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("CartItems");
-                });
 
             modelBuilder.Entity("BusinessObjectLayer.Entities.CategoryEntity", b =>
                 {
@@ -57,6 +36,21 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("BusinessObjectLayer.Entities.DraftEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Drafts");
+                });
+
             modelBuilder.Entity("BusinessObjectLayer.Entities.OrderEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -69,12 +63,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("BillNumber")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("SubmittedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<float>("TotalPrice")
                         .HasColumnType("real");
@@ -100,6 +88,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("DraftEntityId")
+                        .HasColumnType("int");
+
                     b.Property<string>("EanCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -122,6 +113,8 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DraftEntityId");
 
                     b.HasIndex("OrderEntityId");
 
@@ -225,19 +218,12 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Warehouses");
                 });
 
-            modelBuilder.Entity("BusinessObjectLayer.Entities.CartItemEntity", b =>
-                {
-                    b.HasOne("BusinessObjectLayer.Entities.ProductEntity", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("BusinessObjectLayer.Entities.ProductEntity", b =>
                 {
+                    b.HasOne("BusinessObjectLayer.Entities.DraftEntity", null)
+                        .WithMany("Products")
+                        .HasForeignKey("DraftEntityId");
+
                     b.HasOne("BusinessObjectLayer.Entities.OrderEntity", null)
                         .WithMany("Products")
                         .HasForeignKey("OrderEntityId");
@@ -260,6 +246,11 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("BusinessObjectLayer.Entities.DraftEntity", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("BusinessObjectLayer.Entities.OrderEntity", b =>

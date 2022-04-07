@@ -1,18 +1,17 @@
-﻿using BusinessObjectLayer.Enums;
+﻿using BusinessObjectLayer.Entities;
+using BusinessObjectLayer.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BusinessObjectLayer.Entities
+namespace BusinessObjectLayer.Dtos
 {
-    [Table("Orders")]
-    public class OrderEntity
+    public class OrderDto
     {
-        [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Users")]
         public int UserId { get; set; }
 
         public OrderStatus Status { get; set; }
@@ -21,11 +20,10 @@ namespace BusinessObjectLayer.Entities
 
         public string BillNumber { get; set; }
 
-        public virtual ICollection<ProductEntity> Products { get; set; }
+        public virtual ICollection<ProductDto> Products { get; set; }
 
         public DateTime? SubmittedAt { get; set; }
 
         public float TotalPrice { get; set; }
-
     }
 }

@@ -30,5 +30,9 @@ namespace DataAccessLayer
         public DbSet<SubcategoryEntity> Subcategories { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<WarehouseEntity> Warehouses { get; set; }
+        public DbSet<CartItemEntity> Items { get; set; }
+
+        public DbSet<ProductWarehouseMapping> ProductWarehouseMapping { get; set; }
     }
 }
