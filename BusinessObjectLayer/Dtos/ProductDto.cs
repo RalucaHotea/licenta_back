@@ -19,5 +19,9 @@
 
         public string ImagePath { get; set; }
 
+        public int WarehouseId { get; set; }
+
+        public int Quantity { get; set; }
+
     }
 }
