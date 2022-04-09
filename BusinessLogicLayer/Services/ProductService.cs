@@ -139,6 +139,7 @@ namespace BusinessLogicLayer.Services
             var item = await cartRepository.GetItemByUserAndProductIdAsync(itemToAdd.UserId,itemToAdd.ProductId);
             if (item != null)
             {
+                item.Quantity = item.Quantity + 1;
                 await cartRepository.UpdateCartItem(item);
             }
             else

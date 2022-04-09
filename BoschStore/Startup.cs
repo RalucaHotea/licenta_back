@@ -58,6 +58,7 @@ namespace BoschStore
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             services.AddMvcCore();
 

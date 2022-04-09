@@ -18,11 +18,13 @@ namespace BoschStore.Controllers
 
         private readonly IProductService productService;
         private readonly IUserService userService;
+        private readonly IOrderService orderService;
 
-        public ProductController(IProductService _productService, IUserService _userService)
+        public ProductController(IProductService _productService, IUserService _userService, IOrderService _orderService)
         {
             productService = _productService;
             userService = _userService;
+            orderService = _orderService;
         }
 
         [HttpPost]
@@ -238,12 +240,12 @@ namespace BoschStore.Controllers
         {
             if (itemToUpdate == null)
             {
-                return NotFound("The product was not found!");
+                return NotFound("The item was not found!");
             }
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Invalid product object sent from client");
-                return BadRequest("Invalid product object");
+                ModelState.AddModelError(string.Empty, "Invalid item object sent from client");
+                return BadRequest("Invalid item object");
             }
             await productService.UpdateCartItemAsync(itemToUpdate);
             return Ok();
@@ -294,6 +296,25 @@ namespace BoschStore.Controllers
             }
             return Ok(user);
 
+        }
+
+        [HttpPost]
+        [Route("AddOrder")]
+        public async Task<ActionResult> AddOrder([FromBody] OrderDto order)
+        {
+            if (order == null)
+            {
+                ModelState.AddModelError(string.Empty, "Order object sent from client is null");
+                return BadRequest("Order object is null");
+            }
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Order object sent from client is invalid");
+                return BadRequest("Invalid Order Object");
+            }
+            await orderService.AddOrderAsync(order);
+
+            return Ok(order);
         }
 
     }
