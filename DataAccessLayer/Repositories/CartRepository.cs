@@ -17,37 +17,22 @@ namespace DataAccessLayer.Repositories
             dbContext = _dbContext;
         }
 
-        public async Task CreateCartItem(CartItemEntity item)
+        public async Task<int> CreateCartAsync(UserCartEntity cart)
         {
-            dbContext.Items.Add(item);
+            dbContext.Carts.Add(cart);
             await dbContext.SaveChangesAsync();
+            return cart.Id;
         }
 
-        public async Task DeleteCartItem(CartItemEntity item)
+        public Task<UserCartEntity> GetCartByUserIdAsync(int userId)
         {
-            dbContext.Items.Remove(item);
-            await dbContext.SaveChangesAsync();
+            return dbContext.Carts.Where(x => x.UserId == userId).Include(x => x.Items).FirstOrDefaultAsync();
         }
 
-        public Task<List<CartItemEntity>> GetCartItemsByUserIdAsync(int userId)
+        public Task<UserCartEntity> GetCartByIdAsync(int cartId)
         {
-            return dbContext.Items.Where(x => x.UserId == userId).Include(x => x.Product).ToListAsync();
+            return dbContext.Carts.Where(x => x.Id == cartId).Include(x => x.Items).FirstOrDefaultAsync();
         }
 
-        public Task<CartItemEntity> GetItemByIdAsync(int itemId)
-        {
-            return dbContext.Items.Where(x => x.Id == itemId).AsNoTracking().FirstOrDefaultAsync();
-        }
-
-        public Task<CartItemEntity> GetItemByUserAndProductIdAsync(int userId, int productId)
-        {
-            return dbContext.Items.Where(x => x.ProductId == productId && x.UserId == userId).AsNoTracking().FirstOrDefaultAsync();
-        }
-
-        public async Task UpdateCartItem(CartItemEntity item)
-        {
-            dbContext.Items.Update(item);
-            await dbContext.SaveChangesAsync();
-        }
     }
 }

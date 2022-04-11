@@ -48,7 +48,7 @@ namespace BusinessLogicLayer.Services
                 WarehouseId = productToAdd.WarehouseId,
                 Quantity = productToAdd.Quantity,
             };
-            await productWarehouseMappingRepository.CreateProductWarehouseMappingAsync(productStock);
+            await productWarehouseMappingRepository.CreateProductWarehouseMapping(productStock);
             return productId;
         }
 
@@ -134,51 +134,6 @@ namespace BusinessLogicLayer.Services
                 .ToList();
         }
 
-        public async Task CreateCartItemAsync(CartItemDto itemToAdd)
-        {
-            var item = await cartRepository.GetItemByUserAndProductIdAsync(itemToAdd.UserId,itemToAdd.ProductId);
-            if (item != null)
-            {
-                item.Quantity = item.Quantity + 1;
-                await cartRepository.UpdateCartItem(item);
-            }
-            else
-            {
-                await cartRepository.CreateCartItem(mapper.Map<CartItemDto, CartItemEntity>(itemToAdd));
-            }
-        }
-        public async Task<CartItemDto> GetCartItemByIdAsync(int itemId)
-        {
-            var item = await cartRepository.GetItemByIdAsync(itemId);
-            return mapper.Map<CartItemEntity, CartItemDto>(item);
-        }
-
-        public async Task<List<CartItemDto>> GetCartItemsByUserIdAsync(int userId)
-        {
-            var items = await cartRepository.GetCartItemsByUserIdAsync(userId);
-            return items.Select(mapper.Map<CartItemEntity, CartItemDto>)
-                .ToList();
-        }
-
-        public async Task UpdateCartItemAsync(CartItemDto itemToUpdate)
-        {
-            if(itemToUpdate.Quantity == 0)
-            {
-                await cartRepository.DeleteCartItem(mapper.Map<CartItemDto, CartItemEntity>(itemToUpdate));
-            }
-            else { 
-            await cartRepository.UpdateCartItem(mapper.Map<CartItemDto, CartItemEntity>(itemToUpdate));
-            }
-        }
-
-        public async Task DeleteCartItemAsync(int itemId)
-        {
-            var itemToDelete = await cartRepository.GetItemByIdAsync(itemId);
-            if(itemToDelete != null)
-            {
-                await cartRepository.DeleteCartItem(itemToDelete);
-            }
-        }
-
+      
     }
 }

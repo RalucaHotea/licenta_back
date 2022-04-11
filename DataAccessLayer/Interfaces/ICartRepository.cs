@@ -9,11 +9,9 @@ namespace DataAccessLayer.Interfaces
 {
     public interface ICartRepository
     {
-        public Task CreateCartItem(CartItemEntity item);
-        public Task<CartItemEntity> GetItemByIdAsync(int itemId);
-        public Task<CartItemEntity> GetItemByUserAndProductIdAsync(int userId,int productId);
-        public Task<List<CartItemEntity>> GetCartItemsByUserIdAsync(int userId);
-        public Task DeleteCartItem(CartItemEntity item);
-        public Task UpdateCartItem(CartItemEntity item);
+        public Task<int> CreateCartAsync(UserCartEntity cart);
+        public Task<UserCartEntity> GetCartByUserIdAsync(int userId);
+        public Task<UserCartEntity> GetCartByIdAsync(int cartId);
+
     }
 }

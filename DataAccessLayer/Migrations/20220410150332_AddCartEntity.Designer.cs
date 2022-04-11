@@ -4,14 +4,16 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(BoschStoreContext))]
-    partial class BoschStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20220410150332_AddCartEntity")]
+    partial class AddCartEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,17 +31,25 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("OrderEntityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserCartEntityId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CartId");
+                    b.HasIndex("OrderEntityId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("UserCartEntityId");
 
                     b.ToTable("CartItems");
                 });
@@ -259,11 +269,9 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("BusinessObjectLayer.Entities.CartItemEntity", b =>
                 {
-                    b.HasOne("BusinessObjectLayer.Entities.UserCartEntity", "Cart")
+                    b.HasOne("BusinessObjectLayer.Entities.OrderEntity", null)
                         .WithMany("Items")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderEntityId");
 
                     b.HasOne("BusinessObjectLayer.Entities.ProductEntity", "Product")
                         .WithMany()
@@ -271,7 +279,9 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Cart");
+                    b.HasOne("BusinessObjectLayer.Entities.UserCartEntity", null)
+                        .WithMany("Items")
+                        .HasForeignKey("UserCartEntityId");
 
                     b.Navigation("Product");
                 });
@@ -304,6 +314,11 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("BusinessObjectLayer.Entities.OrderEntity", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("BusinessObjectLayer.Entities.UserCartEntity", b =>

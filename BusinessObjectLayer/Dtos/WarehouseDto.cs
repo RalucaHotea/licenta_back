@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace BusinessObjectLayer.Dtos
 {
-    public class CartItemDto
+    public class WarehouseDto
     {
         public int Id { get; set; }
 
-        public int ProductId { get; set; }
+        public string Name { get; set; }
 
-        public int Quantity { get; set; }
-
-        public virtual ProductDto Product { get; set; }
+        public string Location { get; set; }
     }
 }

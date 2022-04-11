@@ -10,5 +10,8 @@ namespace DataAccessLayer.Interfaces
     public interface IOrderRepository
     {
         public Task CreateOrder(OrderEntity item);
+        public Task<List<OrderEntity>> GetAllOrdersByUserId(int userId);
+        public Task<List<OrderEntity>> GetAllOrders();
+        public Task<List<PickupPointEntity>> GetAllPickupPoints();
     }
 }

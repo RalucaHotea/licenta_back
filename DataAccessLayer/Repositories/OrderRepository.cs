@@ -1,5 +1,6 @@
 ﻿using BusinessObjectLayer.Entities;
 using DataAccessLayer.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,21 @@ namespace DataAccessLayer.Repositories
             dbContext.Orders.Add(item);
             await dbContext.SaveChangesAsync();
 
+        }
+
+        public Task<List<OrderEntity>> GetAllOrders()
+        {
+            return dbContext.Orders.Include(x => x.User).AsNoTracking().ToListAsync();
+        }
+
+        public Task<List<OrderEntity>> GetAllOrdersByUserId(int userId)
+        {
+           return dbContext.Orders.Where(x => x.UserId == userId).Include(x => x.User).AsNoTracking().ToListAsync();
+        }
+
+        public Task<List<PickupPointEntity>> GetAllPickupPoints()
+        {
+            return dbContext.PickupPoints.AsNoTracking().ToListAsync();
         }
     }
 }

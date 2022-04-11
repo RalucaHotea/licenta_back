@@ -52,13 +52,16 @@ namespace BoschStore
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductWarehouseMappingRepository, ProductWarehouseMappingRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
-
-
+            services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+            services.AddScoped<IProductWarehouseMappingRepository, ProductWarehouseMappingRepository>();
 
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICartService, CartService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IWarehouseService, WarehouseService>();
 
             services.AddMvcCore();
 

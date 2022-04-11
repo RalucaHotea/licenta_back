@@ -18,13 +18,17 @@ namespace BoschStore.Controllers
 
         private readonly IProductService productService;
         private readonly IUserService userService;
+        private readonly ICartService cartService;
         private readonly IOrderService orderService;
+        private readonly IWarehouseService warehouseService;
 
-        public ProductController(IProductService _productService, IUserService _userService, IOrderService _orderService)
+        public ProductController(IProductService _productService, ICartService _cartService, IUserService _userService, IOrderService _orderService, IWarehouseService _warehouseService)
         {
             productService = _productService;
             userService = _userService;
             orderService = _orderService;
+            warehouseService = _warehouseService;
+            cartService = _cartService;
         }
 
         [HttpPost]
@@ -215,75 +219,6 @@ namespace BoschStore.Controllers
             return BadRequest("Could not delete the file!");
         }
 
-        [HttpPost]
-        [Route("AddItemToCart")]
-        public async Task<ActionResult> AddDraft([FromBody] CartItemDto item)
-        {
-            if (item == null)
-            {
-                ModelState.AddModelError(string.Empty, "Product Object sent from client is null");
-                return BadRequest("Product object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError(string.Empty, "Product object sent from client is invalid");
-                return BadRequest("Invalid Product Object");
-            }
-            await productService.CreateCartItemAsync(item);
-
-            return Ok(item);
-        }
-
-        [HttpPut]
-        [Route("UpdateCartItem")]
-        public async Task<IActionResult> UpdateCartItem([FromBody] CartItemDto itemToUpdate)
-        {
-            if (itemToUpdate == null)
-            {
-                return NotFound("The item was not found!");
-            }
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError(string.Empty, "Invalid item object sent from client");
-                return BadRequest("Invalid item object");
-            }
-            await productService.UpdateCartItemAsync(itemToUpdate);
-            return Ok();
-        }
-
-        [HttpGet]
-        [Route("GetCartItemsByUserId")]
-        public async Task<ActionResult> GetCartItemsByUserId([FromQuery] int userId)
-        {
-            var items = await productService.GetCartItemsByUserIdAsync(userId);
-            return Ok(items);
-        }
-
-        [HttpGet]
-        [Route("GetCartItemById")]
-        public async Task<ActionResult> GetCartItemById([FromQuery] int itemId)
-        {
-            var item = await productService.GetCartItemByIdAsync(itemId);
-            if (item == null)
-            {
-                return NotFound("The item was not found!");
-            }
-            return Ok(item);
-        }
-
-
-        [HttpDelete]
-        [Route("DeleteCartItem")]
-        public async Task<IActionResult> DeleteCartItem([FromQuery] int itemId)
-        {
-            if (itemId == 0)
-            {
-                ModelState.AddModelError(string.Empty, "Item object sent from client is null");
-                return BadRequest("Item object is null");
-            }
-            await productService.DeleteCartItemAsync(itemId);
-            return Ok();
-        }
 
         [HttpGet]
         [Route("GetUserByUserUsername")]
@@ -297,6 +232,7 @@ namespace BoschStore.Controllers
             return Ok(user);
 
         }
+
 
         [HttpPost]
         [Route("AddOrder")]
@@ -317,5 +253,57 @@ namespace BoschStore.Controllers
             return Ok(order);
         }
 
+
+        [HttpGet]
+        [Route("GetOrdersByUserId")]
+        public async Task<ActionResult> GetOrderByUserId([FromQuery] int userId)
+        {
+            var orders = await orderService.GetAllOrdersByUserIdAsync(userId);
+            if (!orders.Any())
+            {
+                return NotFound();
+            }
+            return Ok(orders);
+        }
+
+        [HttpGet]
+        [Route("GetAllOrders")]
+        public async Task<ActionResult> GetAllOrders()
+        {
+            var orders = await orderService.GetAllOrdersAsync();
+            if (!orders.Any())
+            {
+                return NotFound();
+            }
+            return Ok(orders);
+        }
+
+        [HttpGet]
+        [Route("GetAllPickupPoints")]
+        public async Task<ActionResult> GetAllPickupPoints()
+        {
+            var pickupPoints = await orderService.GetAllPickupPointsAsync();
+            if (!pickupPoints.Any())
+            {
+                return NotFound();
+            }
+            return Ok(pickupPoints);
+        }
+
+        [HttpGet]
+        [Route("GetProductStockById")]
+        public async Task<ActionResult> GetProductStockById(int productId)
+        {
+            var stock = await warehouseService.GetProductStockByIdAsync(productId);
+            return Ok(stock);
+        }
+
+        [HttpGet]
+        [Route("GetAllWarehouses")]
+        public async Task<ActionResult> GetAllWarehouses()
+        {
+            var warehouses = await warehouseService.GetAllWarehousesAsync();
+            return Ok(warehouses);
+        }
     }
 }

@@ -9,9 +9,8 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IProductWarehouseMappingRepository
     {
-        public Task CreateProductWarehouseMappingAsync(ProductWarehouseMapping productWarehouseMapping);
-        public Task<List<ProductWarehouseMapping>> GetAllStocksAsync();
-        public int GetProductStockByProductIdAsync(int productId);
-
+        public Task CreateProductWarehouseMapping(ProductWarehouseMapping productWarehouseMapping);
+        public Task<List<ProductWarehouseMapping>> GetAllStocks();
+        public Task<int> GetAllStocksByProductId(int productId);
     }
 }
