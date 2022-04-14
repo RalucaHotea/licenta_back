@@ -17,21 +17,33 @@ namespace DataAccessLayer.Repositories
             dbContext = _dbContext;
         }
 
-        public async Task CreateOrder(OrderEntity item)
+        public async Task<int> CreateOrder(OrderEntity item)
         {
             dbContext.Orders.Add(item);
             await dbContext.SaveChangesAsync();
+            return item.Id;
+        }
 
+        public async Task UpdateOrderAsync(OrderEntity item)
+        {
+            dbContext.Orders.Update(item);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateOrderItemsAsync(List<OrderItemEntity> items)
+        {
+            dbContext.OrderItems.UpdateRange(items);
+            await dbContext.SaveChangesAsync();
         }
 
         public Task<List<OrderEntity>> GetAllOrders()
         {
-            return dbContext.Orders.Include(x => x.User).AsNoTracking().ToListAsync();
+            return dbContext.Orders.Include(x => x.User).Include(x => x.Items).ThenInclude(x => x.Product).AsNoTracking().ToListAsync();
         }
 
         public Task<List<OrderEntity>> GetAllOrdersByUserId(int userId)
         {
-           return dbContext.Orders.Where(x => x.UserId == userId).Include(x => x.User).AsNoTracking().ToListAsync();
+           return dbContext.Orders.Where(x => x.UserId == userId).Include(x => x.User).Include(x => x.Items).ThenInclude(x => x.Product).AsNoTracking().ToListAsync();
         }
 
         public Task<List<PickupPointEntity>> GetAllPickupPoints()

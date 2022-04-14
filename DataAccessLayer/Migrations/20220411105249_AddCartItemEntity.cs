@@ -35,13 +35,7 @@ namespace DataAccessLayer.Migrations
                 table: "CartItems",
                 column: "CartId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_CartItems_Carts_CartId",
-                table: "CartItems",
-                column: "CartId",
-                principalTable: "Carts",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+     
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

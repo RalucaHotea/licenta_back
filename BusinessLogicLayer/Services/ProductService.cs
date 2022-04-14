@@ -14,16 +14,16 @@ namespace BusinessLogicLayer.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository productRepository;
-        private readonly ICartRepository cartRepository;
         private readonly IProductWarehouseMappingRepository productWarehouseMappingRepository;
+        private readonly ICartItemRepository cartItemRepository;
         private readonly IMapper mapper;
 
-        public ProductService(IProductRepository _productRepository, IProductWarehouseMappingRepository _productWarehouseMappingRepository, ICartRepository _cartRepository, IMapper _mapper)
+        public ProductService(IProductRepository _productRepository, IProductWarehouseMappingRepository _productWarehouseMappingRepository, ICartItemRepository _cartItemRepository, IMapper _mapper)
         {
             productRepository = _productRepository;
             productWarehouseMappingRepository = _productWarehouseMappingRepository;
+            cartItemRepository = _cartItemRepository;
             mapper = _mapper;
-            cartRepository = _cartRepository;
         }
 
         public async Task<int> AddProductAsync(ProductDto productToAdd)
@@ -95,15 +95,24 @@ namespace BusinessLogicLayer.Services
 
             if (productToDelete != null)
             {
-                var folderName = Path.Combine("Resources", "Images");
-                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                var fullPath = Path.Combine(folderPath, productToDelete.Name);
+                var productName = productToDelete.Name.Trim();
+                var folderName = Path.Combine("Resources", "Images").Trim('"');
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), folderName).Trim('"');
+                var fullPath = Path.Combine(folderPath, productName);
 
                 if (Directory.Exists(fullPath))
                 {
-                    foreach (var item in System.IO.Directory.GetFiles(fullPath))
+                    foreach (var item in Directory.GetFiles(fullPath))
                     {
-                        System.IO.File.Delete(item);
+                       File.Delete(item);
+                    }
+                }
+                var cartItems = await cartItemRepository.GetItemsByProductIdAsync(productId);
+                if (cartItems.Any())
+                {
+                    foreach( var item in cartItems)
+                    {
+                       await cartItemRepository.DeleteCartItem(item);
                     }
                 }
                 await productRepository.DeleteProductAsync(productToDelete);
@@ -133,7 +142,5 @@ namespace BusinessLogicLayer.Services
                 .Select(mapper.Map<SubcategoryEntity, SubcategoryDto>)
                 .ToList();
         }
-
-      
     }
 }

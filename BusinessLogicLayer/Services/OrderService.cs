@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Services
 {
+
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository orderRepository;
@@ -21,28 +22,25 @@ namespace BusinessLogicLayer.Services
             orderRepository = _orderRepository;
             mapper = _mapper;
         }
-        public async Task<double> AddOrderAsync(OrderDto order)
+
+        public async Task CreateOrderAsync(AddOrderDto orderToAdd)
         {
-            var totalPrice = 0.0;
-/*
-            foreach(CartItemEntity item in order.Items)
-            {
-                var price = item.Product.Price * item.Quantity;
-                totalPrice = totalPrice + price;
-            }*/
-            var newOrder = new OrderDto
-            {
-                UserId = order.UserId,
-                Status = order.Status,
-                SubmittedAt = DateTime.Now,
-                PickupPointId = order.PickupPointId,
-                TotalPrice = totalPrice,
-                Items = order.Items
-            };
+            var orderItemsEntities = new List<OrderItemEntity>();
+            var ordertest = orderToAdd.Order;
+            var items = orderToAdd.Items;
+            ordertest.TotalPrice = 0;
 
-            await orderRepository.CreateOrder(mapper.Map<OrderDto, OrderEntity>(newOrder));
-
-            return totalPrice;
+            foreach ( CartItemEntity cartItem in items)
+            {
+                ordertest.TotalPrice += cartItem.Product.Price * cartItem.Quantity;
+                orderItemsEntities.Add(new OrderItemEntity
+                {
+                    ProductId = cartItem.ProductId,
+                    Quantity = cartItem.Quantity,
+                });
+            }
+            ordertest.Items = orderItemsEntities;
+            await orderRepository.CreateOrder(mapper.Map<OrderDto,OrderEntity>(ordertest));
         }
 
         public async Task<List<OrderDto>> GetAllOrdersAsync()
@@ -62,5 +60,7 @@ namespace BusinessLogicLayer.Services
             var pickupPoints = await orderRepository.GetAllPickupPoints();
             return pickupPoints.Select(mapper.Map<PickupPointEntity, PickupPointDto>).ToList();
         }
+
+       
     }
 }

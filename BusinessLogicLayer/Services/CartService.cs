@@ -11,37 +11,18 @@ namespace BusinessLogicLayer.Services
 {
     public class CartService : ICartService
     {
-        private readonly ICartRepository cartRepository;
         private readonly ICartItemRepository cartItemRepository;
         private readonly IMapper mapper;
 
-        public CartService(ICartRepository _cartRepository, ICartItemRepository _cartItemRepository, IMapper _mapper)
+        public CartService(ICartItemRepository _cartItemRepository, IMapper _mapper)
         {
-            cartRepository = _cartRepository;
             cartItemRepository = _cartItemRepository;
             mapper = _mapper;
-        }
-        public async Task CreateCartAsync(UserCartDto cart)
-        {
-            await cartRepository.CreateCartAsync(mapper.Map<UserCartDto, UserCartEntity>(cart));
-        }
-
-        public async Task<UserCartDto> GetCartByUserIdAsync(int userId)
-        {
-            var cart = await cartRepository.GetCartByUserIdAsync(userId);
-            return mapper.Map<UserCartEntity,UserCartDto>(cart);
-        }
-
-        public async Task<UserCartDto> GetCartByIdAsync(int cartId)
-        {
-            var cart = await cartRepository.GetCartByIdAsync(cartId);
-            return mapper.Map<UserCartEntity, UserCartDto>(cart);
         }
 
         public async Task CreateCartItemAsync(CartItemDto itemToAdd)
         {
-            var cart = await cartRepository.GetCartByIdAsync(itemToAdd.Id);
-            var item = await cartItemRepository.GetItemByProductIdAsync(itemToAdd.ProductId);
+            var item = await cartItemRepository.GetItemByProductIdAndUserIdAsync(itemToAdd.ProductId, itemToAdd.UserId);
             if (item != null)
             {
                 item.Quantity++;
@@ -50,12 +31,6 @@ namespace BusinessLogicLayer.Services
             else
             {
                 await cartItemRepository.CreateCartItemAsync(mapper.Map<CartItemDto, CartItemEntity>(itemToAdd));
-                if(cart.Items== null)
-                {
-                    
-                }
-                cart.Items.Add(item);
-
             }
         }
         public async Task<CartItemDto> GetCartItemByIdAsync(int itemId)
@@ -73,18 +48,6 @@ namespace BusinessLogicLayer.Services
             }
         }
 
-        public async Task ClearCartByUserIdAsync(int userId)
-        {
-            var cart = await cartRepository.GetCartByUserIdAsync(userId);
-            if (cart.Items.Any())
-            {
-                foreach (CartItemEntity item in cart.Items)
-                {
-                    await cartItemRepository.DeleteCartItem(item);
-                }
-            }
-        }
-
         public async Task UpdateCartItemAsync(CartItemDto itemToUpdate)
         {
             if (itemToUpdate.Quantity == 0)
@@ -95,6 +58,22 @@ namespace BusinessLogicLayer.Services
             {
                 await cartItemRepository.UpdateCartItem(mapper.Map<CartItemDto, CartItemEntity>(itemToUpdate));
             }
+        }
+
+        public async Task<ICollection<CartItemDto>> GetCartItemsByUserIdAsync(int userId)
+        {
+            var items = await cartItemRepository.GetCartItemsByUserIdAsync(userId);
+            return items
+                .Select(mapper.Map<CartItemEntity, CartItemDto>)
+                .ToList();
+        }
+
+        public async Task<ICollection<CartItemDto>> GetItemsByProductIdAsync(int productId)
+        {
+            var items = await cartItemRepository.GetItemsByProductIdAsync(productId);
+            return items
+                .Select(mapper.Map<CartItemEntity, CartItemDto>)
+                .ToList();
         }
     }
 }

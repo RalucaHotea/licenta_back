@@ -51,7 +51,6 @@ namespace BoschStore
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductWarehouseMappingRepository, ProductWarehouseMappingRepository>();
-            services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IWarehouseRepository, WarehouseRepository>();
@@ -100,7 +99,6 @@ namespace BoschStore
             });
 
             app.UseRouting();
-
 
             app.UseCors(x => x
               .AllowAnyMethod());

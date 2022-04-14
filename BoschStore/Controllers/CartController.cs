@@ -21,26 +21,6 @@ namespace BoschStore.Controllers
         }
 
         [HttpPost]
-        [Route("CreateUserCart")]
-        public async Task<ActionResult> CreateUserCart([FromBody] UserCartDto cart)
-        {
-            if (cart == null)
-            {
-                ModelState.AddModelError(string.Empty, "Cart Object sent from client is null");
-                return BadRequest("Cart object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError(string.Empty, "Cart object sent from client is invalid");
-                return BadRequest("Cart Product Object");
-            }
-            await cartService.CreateCartAsync(cart);
-
-            return Ok(cart);
-        }
-
-
-        [HttpPost]
         [Route("AddItemToCart")]
         public async Task<ActionResult> AddItemToCart([FromBody] CartItemDto item)
         {
@@ -76,27 +56,36 @@ namespace BoschStore.Controllers
             return Ok();
         }
 
+
         [HttpGet]
-        [Route("GetCartByUserId")]
-        public async Task<ActionResult> GetCartById([FromQuery] int userId)
+        [Route("GetCartItemById")]
+        public async Task<IActionResult> GetCartItemsById([FromQuery] int itemId)
         {
-            var item = await cartService.GetCartByUserIdAsync(userId);
+            var item = await cartService.GetCartItemByIdAsync(itemId);
             if (item == null)
             {
-                return NotFound("The item was not found!");
+                return NotFound();
             }
             return Ok(item);
+        }
+
+        [HttpGet]
+        [Route("GetCartItemsByUserId")]
+        public async Task<IActionResult> GetCartItemsByUserId([FromQuery] int userId)
+        {
+            var items = await cartService.GetCartItemsByUserIdAsync(userId);
+            if (!items.Any())
+            {
+                return NotFound();
+            }
+           
+            return Ok(items);
         }
 
         [HttpDelete]
         [Route("DeleteCartItem")]
         public async Task<IActionResult> DeleteCartItem([FromQuery] int itemId)
         {
-            if (itemId == 0)
-            {
-                ModelState.AddModelError(string.Empty, "Item object sent from client is null");
-                return BadRequest("Item object is null");
-            }
             await cartService.DeleteCartItemAsync(itemId);
             return Ok();
         }
@@ -105,12 +94,7 @@ namespace BoschStore.Controllers
         [Route("ClearCartByUserId")]
         public async Task<IActionResult> ClearCartByUserId([FromQuery] int userId)
         {
-            if (userId == 0)
-            {
-                ModelState.AddModelError(string.Empty, "User object sent from client is null");
-                return BadRequest("User object is null");
-            }
-            await cartService.ClearCartByUserIdAsync(userId);
+            await cartService.DeleteCartItemAsync(userId);
             return Ok();
         }
     }

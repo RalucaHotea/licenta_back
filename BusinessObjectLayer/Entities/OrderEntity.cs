@@ -17,7 +17,6 @@ namespace BusinessObjectLayer.Entities
 
         [ForeignKey("PickupPoints")]
         public int PickupPointId { get; set; }
-
         public double TotalPrice { get; set; }
 
         public string ApprovalNumber { get; set; }
@@ -27,5 +26,6 @@ namespace BusinessObjectLayer.Entities
         public DateTime? SubmittedAt { get; set; }
         
         public virtual UserEntity User { get; set; }
+        public virtual List<OrderItemEntity> Items { get; set; }
     }
 }

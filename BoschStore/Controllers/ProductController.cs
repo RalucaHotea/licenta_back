@@ -19,14 +19,12 @@ namespace BoschStore.Controllers
         private readonly IProductService productService;
         private readonly IUserService userService;
         private readonly ICartService cartService;
-        private readonly IOrderService orderService;
         private readonly IWarehouseService warehouseService;
 
-        public ProductController(IProductService _productService, ICartService _cartService, IUserService _userService, IOrderService _orderService, IWarehouseService _warehouseService)
+        public ProductController(IProductService _productService, ICartService _cartService, IUserService _userService, IWarehouseService _warehouseService)
         {
             productService = _productService;
             userService = _userService;
-            orderService = _orderService;
             warehouseService = _warehouseService;
             cartService = _cartService;
         }
@@ -219,7 +217,6 @@ namespace BoschStore.Controllers
             return BadRequest("Could not delete the file!");
         }
 
-
         [HttpGet]
         [Route("GetUserByUserUsername")]
         public async Task<ActionResult> GetUserByUserUsername([FromQuery] string username)
@@ -232,64 +229,7 @@ namespace BoschStore.Controllers
             return Ok(user);
 
         }
-
-
-        [HttpPost]
-        [Route("AddOrder")]
-        public async Task<ActionResult> AddOrder([FromBody] OrderDto order)
-        {
-            if (order == null)
-            {
-                ModelState.AddModelError(string.Empty, "Order object sent from client is null");
-                return BadRequest("Order object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError(string.Empty, "Order object sent from client is invalid");
-                return BadRequest("Invalid Order Object");
-            }
-            await orderService.AddOrderAsync(order);
-
-            return Ok(order);
-        }
-
-
-        [HttpGet]
-        [Route("GetOrdersByUserId")]
-        public async Task<ActionResult> GetOrderByUserId([FromQuery] int userId)
-        {
-            var orders = await orderService.GetAllOrdersByUserIdAsync(userId);
-            if (!orders.Any())
-            {
-                return NotFound();
-            }
-            return Ok(orders);
-        }
-
-        [HttpGet]
-        [Route("GetAllOrders")]
-        public async Task<ActionResult> GetAllOrders()
-        {
-            var orders = await orderService.GetAllOrdersAsync();
-            if (!orders.Any())
-            {
-                return NotFound();
-            }
-            return Ok(orders);
-        }
-
-        [HttpGet]
-        [Route("GetAllPickupPoints")]
-        public async Task<ActionResult> GetAllPickupPoints()
-        {
-            var pickupPoints = await orderService.GetAllPickupPointsAsync();
-            if (!pickupPoints.Any())
-            {
-                return NotFound();
-            }
-            return Ok(pickupPoints);
-        }
-
+     
         [HttpGet]
         [Route("GetProductStockById")]
         public async Task<ActionResult> GetProductStockById(int productId)

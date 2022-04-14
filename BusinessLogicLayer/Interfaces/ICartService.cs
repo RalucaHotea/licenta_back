@@ -9,12 +9,11 @@ namespace BusinessLogicLayer.Interfaces
 {
     public interface ICartService
     {
-        public Task CreateCartAsync(UserCartDto cart);
-        public Task<UserCartDto> GetCartByUserIdAsync(int userId);
         public Task CreateCartItemAsync(CartItemDto item);
         public Task<CartItemDto> GetCartItemByIdAsync(int itemId);
+        public Task<ICollection<CartItemDto>> GetCartItemsByUserIdAsync(int userId);
+        public Task<ICollection<CartItemDto>> GetItemsByProductIdAsync(int productId);
         public Task UpdateCartItemAsync(CartItemDto itemToUpdate);
         public Task DeleteCartItemAsync(int itemId);
-        public Task ClearCartByUserIdAsync(int userId);
     }
 }

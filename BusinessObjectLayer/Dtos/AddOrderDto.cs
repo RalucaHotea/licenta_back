@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace BusinessObjectLayer.Dtos
 {
-    public class UserCartDto
+    public class AddOrderDto
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public virtual ICollection<CartItemEntity> Items { get; set; }
+        public OrderDto Order { get; set; }
+        public virtual List<CartItemEntity> Items { get; set; }
+
     }
 }
