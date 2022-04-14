@@ -96,6 +96,18 @@ namespace BoschStore.Controllers
             return Ok(products);
         }
 
+        [HttpGet]
+        [Route("GetAllAvailableProducts")]
+        public async Task<ActionResult> GetAllAvailableProducts()
+        {
+            var products = await productService.GetAllAvailableProductsAsync();
+            if (!products.Any())
+            {
+                return NotFound();
+            }
+            return Ok(products);
+        }
+
         [HttpPut]
         [Route("UpdateProduct")]
         public async Task<IActionResult> UpdateProduct([FromBody] ProductDto productToUpdate)
@@ -231,12 +243,21 @@ namespace BoschStore.Controllers
         }
      
         [HttpGet]
-        [Route("GetProductStockById")]
+        [Route("GetProductStockCountById")]
         public async Task<ActionResult> GetProductStockById(int productId)
         {
-            var stock = await warehouseService.GetProductStockByIdAsync(productId);
+            var stock = await warehouseService.GetProductStockCountByIdAsync(productId);
             return Ok(stock);
         }
+
+        [HttpGet]
+        [Route("GetAllProductStocksById")]
+        public async Task<ActionResult> GetAllProductStocksById(int productId)
+        {
+            var stocks = await warehouseService.GetAllProductStocksByIdAsync(productId);
+            return Ok(stocks);
+        }
+
 
         [HttpGet]
         [Route("GetAllWarehouses")]

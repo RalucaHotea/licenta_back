@@ -50,5 +50,10 @@ namespace DataAccessLayer.Repositories
         {
             return dbContext.PickupPoints.AsNoTracking().ToListAsync();
         }
+
+        public Task<PickupPointEntity> GetPickupPointById(int id)
+        {
+            return dbContext.PickupPoints.Where(x => x.Id == id).AsNoTracking().FirstOrDefaultAsync();
+        }
     }
 }

@@ -16,13 +16,15 @@ namespace BusinessLogicLayer.Services
         private readonly IProductRepository productRepository;
         private readonly IProductWarehouseMappingRepository productWarehouseMappingRepository;
         private readonly ICartItemRepository cartItemRepository;
+        private readonly IProductWarehouseMappingRepository warehouseMappingRepository;
         private readonly IMapper mapper;
 
-        public ProductService(IProductRepository _productRepository, IProductWarehouseMappingRepository _productWarehouseMappingRepository, ICartItemRepository _cartItemRepository, IMapper _mapper)
+        public ProductService(IProductRepository _productRepository, IProductWarehouseMappingRepository _productWarehouseMappingRepository, ICartItemRepository _cartItemRepository, IProductWarehouseMappingRepository _warehouseRepository, IMapper _mapper)
         {
             productRepository = _productRepository;
             productWarehouseMappingRepository = _productWarehouseMappingRepository;
             cartItemRepository = _cartItemRepository;
+            warehouseMappingRepository = _warehouseRepository;
             mapper = _mapper;
         }
 
@@ -79,6 +81,23 @@ namespace BusinessLogicLayer.Services
         {
             var products = await productRepository.GetAllProducts();
             return products
+                .Select(mapper.Map<ProductEntity, ProductDto>)
+                .ToList();
+        }
+
+        public async Task<List<ProductDto>> GetAllAvailableProductsAsync()
+        {
+            var products = await productRepository.GetAllProducts();
+            var availableProducts = new List<ProductEntity>();
+            foreach (var product in products)
+            {
+                var productStock = await productWarehouseMappingRepository.GetProductStockCountByProductId(product.Id);
+                if (productStock != 0)
+                {
+                    availableProducts.Add(product);
+                }
+            }
+            return availableProducts
                 .Select(mapper.Map<ProductEntity, ProductDto>)
                 .ToList();
         }

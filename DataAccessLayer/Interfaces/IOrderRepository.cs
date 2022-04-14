@@ -15,5 +15,6 @@ namespace DataAccessLayer.Interfaces
         public Task<List<OrderEntity>> GetAllOrdersByUserId(int userId);
         public Task<List<OrderEntity>> GetAllOrders();
         public Task<List<PickupPointEntity>> GetAllPickupPoints();
+        public Task<PickupPointEntity> GetPickupPointById(int id);
     }
 }

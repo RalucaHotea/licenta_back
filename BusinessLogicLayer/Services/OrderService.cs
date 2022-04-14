@@ -15,17 +15,21 @@ namespace BusinessLogicLayer.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository orderRepository;
+        private readonly IProductWarehouseMappingRepository productWarehouseMappingRepository;
+
         private readonly IMapper mapper;
 
-        public OrderService(IOrderRepository _orderRepository, IMapper _mapper)
+        public OrderService(IOrderRepository _orderRepository, IProductWarehouseMappingRepository _productWarehouseMappingRepository, IMapper _mapper)
         {
             orderRepository = _orderRepository;
+            productWarehouseMappingRepository = _productWarehouseMappingRepository;
             mapper = _mapper;
         }
 
         public async Task CreateOrderAsync(AddOrderDto orderToAdd)
         {
             var orderItemsEntities = new List<OrderItemEntity>();
+            var pickupPoint = await orderRepository.GetPickupPointById(orderToAdd.Order.PickupPointId);
             var ordertest = orderToAdd.Order;
             var items = orderToAdd.Items;
             ordertest.TotalPrice = 0;
@@ -37,9 +41,26 @@ namespace BusinessLogicLayer.Services
                 {
                     ProductId = cartItem.ProductId,
                     Quantity = cartItem.Quantity,
+
                 });
+                var sameCountryProductStock = await productWarehouseMappingRepository.GetProductStockByCountryAndProductId(cartItem.ProductId, pickupPoint.Country);
+                if(sameCountryProductStock != null)
+                {
+                    if (sameCountryProductStock.Quantity >= cartItem.Quantity)
+                    {
+                        sameCountryProductStock.Quantity = sameCountryProductStock.Quantity - cartItem.Quantity;
+                        await productWarehouseMappingRepository.UpdateStock(sameCountryProductStock);
+                    }
+                }else
+                {
+                    var stock = await productWarehouseMappingRepository.GetAllAvailableStocksByProductId(cartItem.ProductId, cartItem.Quantity);
+                    stock.Quantity = stock.Quantity - cartItem.Quantity;
+                    await productWarehouseMappingRepository.UpdateStock(stock);
+                }
             }
+
             ordertest.Items = orderItemsEntities;
+            
             await orderRepository.CreateOrder(mapper.Map<OrderDto,OrderEntity>(ordertest));
         }
 
