@@ -8,16 +8,14 @@ using System.Threading.Tasks;
 
 namespace BusinessObjectLayer.Entities
 {
-    [Table("CartItems")]
-    public class CartItemEntity
+    [Table("PickupPoints")]
+    public class PickupPointEntity
     {
         [Key]
         public int Id { get; set; }
-        [ForeignKey("Products")]
-        public int ProductId { get; set; }
-        [ForeignKey("Users")]
-        public int UserId { get; set; }
-        public int Quantity { get; set; }
-        public virtual ProductEntity Product{ get; set; }
+
+        public string Name { get; set; }
+
+        public string Location { get; set; }
     }
 }

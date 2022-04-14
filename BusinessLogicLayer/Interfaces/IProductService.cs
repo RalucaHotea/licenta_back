@@ -16,10 +16,6 @@ namespace BusinessLogicLayer.Interfaces
         public Task<List<CategoryDto>> GetAllCategoriesAsync();
         public Task<List<SubcategoryDto>> GetAllSubcategoriesAsync();
         public Task<List<SubcategoryDto>> GetAllSubcategoriesByCategoryIdAsync(int CategoryId);
-        public Task CreateCartItemAsync(CartItemDto item);
-        public Task<List<CartItemDto>> GetCartItemsByUserIdAsync(int userId);
-        public Task<CartItemDto> GetCartItemByIdAsync(int itemId);
-        public Task UpdateCartItemAsync(CartItemDto itemToUpdate);
-        public Task DeleteCartItemAsync(int itemId);
+        
     }
 }

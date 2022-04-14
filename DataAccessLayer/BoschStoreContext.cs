@@ -21,7 +21,7 @@ namespace DataAccessLayer
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=CLJ-C-001D2; Database=BoschStore; TrustServerCertificate=True; Trusted_Connection=True;")
+            optionsBuilder.UseSqlServer("Server=CLJ-C-001D2; Database=BoschStore_Dev; TrustServerCertificate=True; Trusted_Connection=True;")
                 .EnableSensitiveDataLogging();
         }
 
@@ -29,9 +29,11 @@ namespace DataAccessLayer
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<SubcategoryEntity> Subcategories { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<OrderItemEntity> OrderItems { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<WarehouseEntity> Warehouses { get; set; }
-        public DbSet<CartItemEntity> Items { get; set; }
+        public DbSet<CartItemEntity> CartItems { get; set; }
+        public DbSet<PickupPointEntity> PickupPoints { get; set; }
         public DbSet<ProductWarehouseMapping> ProductWarehouseMapping { get; set; }
     }
 }

@@ -23,6 +23,15 @@ namespace BusinessObjectLayer.Helpers
             CreateMap<OrderEntity, OrderDto>();
             CreateMap<OrderDto, OrderEntity>();
 
+            CreateMap<ProductWarehouseDto, ProductWarehouseMapping>();
+            CreateMap<ProductWarehouseMapping, ProductWarehouseDto>();
+
+            CreateMap<WarehouseDto, WarehouseEntity>();
+            CreateMap<WarehouseEntity, WarehouseDto>();
+
+            CreateMap<PickupPointDto, PickupPointEntity>();
+            CreateMap<PickupPointEntity, PickupPointDto>();
+
             CreateMap<SubcategoryEntity, SubcategoryDto>();
             CreateMap<SubcategoryDto, SubcategoryEntity>();
         }

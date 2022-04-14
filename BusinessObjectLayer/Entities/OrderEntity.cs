@@ -15,12 +15,17 @@ namespace BusinessObjectLayer.Entities
         [ForeignKey("Users")]
         public int UserId { get; set; }
 
-        public OrderStatus Status { get; set; }
-        public string ApprovalNumber { get; set; }
-        public string BillNumber { get; set; }
-        public DateTime? SubmittedAt { get; set; }
+        [ForeignKey("PickupPoints")]
+        public int PickupPointId { get; set; }
         public double TotalPrice { get; set; }
-        public virtual ICollection<CartItemEntity> Items { get; set; }
+
+        public string ApprovalNumber { get; set; }
+
+        public string BillNumber { get; set; }
+
+        public DateTime? SubmittedAt { get; set; }
+        
         public virtual UserEntity User { get; set; }
+        public virtual List<OrderItemEntity> Items { get; set; }
     }
 }

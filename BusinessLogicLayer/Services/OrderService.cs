@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.Services
 {
+
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository orderRepository;
@@ -21,26 +22,45 @@ namespace BusinessLogicLayer.Services
             orderRepository = _orderRepository;
             mapper = _mapper;
         }
-        public async Task<double> AddOrderAsync(OrderDto order)
+
+        public async Task CreateOrderAsync(AddOrderDto orderToAdd)
         {
-            var totalPrice = 0.0;
+            var orderItemsEntities = new List<OrderItemEntity>();
+            var ordertest = orderToAdd.Order;
+            var items = orderToAdd.Items;
+            ordertest.TotalPrice = 0;
 
-            foreach(CartItemEntity item in order.Items)
+            foreach ( CartItemEntity cartItem in items)
             {
-                var price = item.Product.Price * item.Quantity;
-                totalPrice = totalPrice + price;
+                ordertest.TotalPrice += cartItem.Product.Price * cartItem.Quantity;
+                orderItemsEntities.Add(new OrderItemEntity
+                {
+                    ProductId = cartItem.ProductId,
+                    Quantity = cartItem.Quantity,
+                });
             }
-            var newOrder = new OrderDto
-            {
-                UserId = order.UserId,
-                Status = order.Status,
-                SubmittedAt = DateTime.Now,
-                TotalPrice = totalPrice,
-            };
-
-            await orderRepository.CreateOrder(mapper.Map<OrderDto, OrderEntity>(newOrder));
-
-            return totalPrice;
+            ordertest.Items = orderItemsEntities;
+            await orderRepository.CreateOrder(mapper.Map<OrderDto,OrderEntity>(ordertest));
         }
+
+        public async Task<List<OrderDto>> GetAllOrdersAsync()
+        {
+            var orders = await orderRepository.GetAllOrders();
+            return orders.Select(mapper.Map<OrderEntity,OrderDto>).ToList();
+        }
+
+        public async Task<List<OrderDto>> GetAllOrdersByUserIdAsync(int userId)
+        {
+            var orders = await orderRepository.GetAllOrdersByUserId(userId);
+            return orders.Select(mapper.Map<OrderEntity, OrderDto>).ToList();
+        }
+
+        public async Task<List<PickupPointDto>> GetAllPickupPointsAsync()
+        {
+            var pickupPoints = await orderRepository.GetAllPickupPoints();
+            return pickupPoints.Select(mapper.Map<PickupPointEntity, PickupPointDto>).ToList();
+        }
+
+       
     }
 }
