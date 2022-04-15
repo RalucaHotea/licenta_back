@@ -4,14 +4,16 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(BoschStoreContext))]
-    partial class BoschStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20220415124155_AddShippingRelatedDatesToOrderEntity")]
+    partial class AddShippingRelatedDatesToOrderEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,19 +72,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("BillNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("PickupDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("PickupPointId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ReceivingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ShippingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("SubmittedAt")

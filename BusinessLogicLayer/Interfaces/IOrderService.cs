@@ -11,8 +11,12 @@ namespace BusinessLogicLayer.Interfaces
     public interface IOrderService
     {
         public Task CreateOrderAsync(AddOrderDto orderToAdd);
+        public Task UpdateOrderAsync(OrderDto orderToUpdate);
         public Task<List<OrderDto>> GetAllOrdersByUserIdAsync(int userId);
         public Task<List<OrderDto>> GetAllOrdersAsync();
+        public Task<OrderDto> GetOrderByIdAsync(int orderId);
         public Task<List<PickupPointDto>> GetAllPickupPointsAsync();
+        public Task<PickupPointDto> GetPickupPointByIdAsync(int pickupPointId);
+
     }
 }

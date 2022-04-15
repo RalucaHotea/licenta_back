@@ -26,6 +26,13 @@ namespace DataAccessLayer.Repositories
         {
             dbContext.CartItems.Remove(item);
             await dbContext.SaveChangesAsync();
+
+        }
+
+        public async Task DeleteCartItems(List<CartItemEntity> cartItems)
+        {
+             dbContext.CartItems.RemoveRange(cartItems);
+             await dbContext.SaveChangesAsync();
         }
 
         public Task<CartItemEntity> GetItemByIdAsync(int itemId)
@@ -40,7 +47,7 @@ namespace DataAccessLayer.Repositories
 
         public Task<List<CartItemEntity>> GetCartItemsByUserIdAsync(int userId)
         {
-            return dbContext.CartItems.Where(x => x.UserId == userId).Include(x => x.Product).ToListAsync();
+            return dbContext.CartItems.Where(x => x.UserId == userId).Include(x => x.Product).AsNoTracking().ToListAsync();
         }
 
         public async Task UpdateCartItem(CartItemEntity item)

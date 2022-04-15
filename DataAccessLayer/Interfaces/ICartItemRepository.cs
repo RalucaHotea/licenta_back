@@ -14,6 +14,7 @@ namespace DataAccessLayer.Interfaces
         public Task<List<CartItemEntity>> GetCartItemsByUserIdAsync(int userId);
         public Task<CartItemEntity> GetItemByProductIdAndUserIdAsync(int productId, int userId);
         public Task<List<CartItemEntity>> GetItemsByProductIdAsync(int productId);
+        public Task DeleteCartItems(List<CartItemEntity> cartItems);
         public Task DeleteCartItem(CartItemEntity item);
         public Task UpdateCartItem(CartItemEntity item);
     }

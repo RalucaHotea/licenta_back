@@ -14,18 +14,18 @@ namespace BusinessObjectLayer.Entities
 
         [ForeignKey("Users")]
         public int UserId { get; set; }
-
         [ForeignKey("PickupPoints")]
         public int PickupPointId { get; set; }
         public double TotalPrice { get; set; }
-
         public string ApprovalNumber { get; set; }
-
         public string BillNumber { get; set; }
-
+        public OrderStatus Status { get; set; }
         public DateTime? SubmittedAt { get; set; }
-        
+        public DateTime? ShippingDate { get; set; }
+        public DateTime? ReceivingDate { get; set; }
+        public DateTime? PickupDate { get; set; }
         public virtual UserEntity User { get; set; }
+        public virtual PickupPointEntity PickupPoint { get; set; }
         public virtual List<OrderItemEntity> Items { get; set; }
     }
 }

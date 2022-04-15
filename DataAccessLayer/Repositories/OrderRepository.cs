@@ -55,5 +55,11 @@ namespace DataAccessLayer.Repositories
         {
             return dbContext.PickupPoints.Where(x => x.Id == id).AsNoTracking().FirstOrDefaultAsync();
         }
+
+        public async Task<OrderEntity> GetOrderById(int orderId)
+        {
+            var order = await dbContext.Orders.Where(x => x.Id == orderId).Include(x => x.User).Include(x => x.Items).ThenInclude(x => x.Product).FirstOrDefaultAsync();
+            return order;
+        }
     }
 }

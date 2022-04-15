@@ -2,6 +2,7 @@
 using BusinessLogicLayer.Interfaces;
 using BusinessObjectLayer.Dtos;
 using BusinessObjectLayer.Entities;
+using BusinessObjectLayer.Enums;
 using DataAccessLayer.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -30,13 +31,15 @@ namespace BusinessLogicLayer.Services
         {
             var orderItemsEntities = new List<OrderItemEntity>();
             var pickupPoint = await orderRepository.GetPickupPointById(orderToAdd.Order.PickupPointId);
-            var ordertest = orderToAdd.Order;
+            var orderDto = orderToAdd.Order;
             var items = orderToAdd.Items;
-            ordertest.TotalPrice = 0;
+            orderDto.TotalPrice = 0;
+            orderDto.Status = OrderStatus.InSubmission;
+            
 
             foreach ( CartItemEntity cartItem in items)
             {
-                ordertest.TotalPrice += cartItem.Product.Price * cartItem.Quantity;
+                orderDto.TotalPrice += cartItem.Product.Price * cartItem.Quantity;
                 orderItemsEntities.Add(new OrderItemEntity
                 {
                     ProductId = cartItem.ProductId,
@@ -48,6 +51,7 @@ namespace BusinessLogicLayer.Services
                 {
                     if (sameCountryProductStock.Quantity >= cartItem.Quantity)
                     {
+
                         sameCountryProductStock.Quantity = sameCountryProductStock.Quantity - cartItem.Quantity;
                         await productWarehouseMappingRepository.UpdateStock(sameCountryProductStock);
                     }
@@ -59,15 +63,32 @@ namespace BusinessLogicLayer.Services
                 }
             }
 
-            ordertest.Items = orderItemsEntities;
+            orderDto.Items = orderItemsEntities;
             
-            await orderRepository.CreateOrder(mapper.Map<OrderDto,OrderEntity>(ordertest));
+            await orderRepository.CreateOrder(mapper.Map<OrderDto,OrderEntity>(orderDto));
+        }
+
+        public async Task UpdateOrderAsync(OrderDto orderToUpdate)
+        {
+            await orderRepository.UpdateOrderAsync(mapper.Map<OrderDto, OrderEntity>(orderToUpdate));
         }
 
         public async Task<List<OrderDto>> GetAllOrdersAsync()
         {
             var orders = await orderRepository.GetAllOrders();
             return orders.Select(mapper.Map<OrderEntity,OrderDto>).ToList();
+        }
+
+        public async Task<OrderDto> GetOrderByIdAsync(int orderId)
+        {
+            var order = await orderRepository.GetOrderById(orderId);
+            return mapper.Map<OrderEntity, OrderDto>(order);
+        }
+
+        public async Task<PickupPointDto> GetPickupPointByIdAsync(int pickupPointId)
+        {
+            var pickupPoint = await orderRepository.GetPickupPointById(pickupPointId);
+            return mapper.Map<PickupPointEntity, PickupPointDto>(pickupPoint);
         }
 
         public async Task<List<OrderDto>> GetAllOrdersByUserIdAsync(int userId)

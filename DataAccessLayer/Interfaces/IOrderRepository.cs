@@ -13,6 +13,7 @@ namespace DataAccessLayer.Interfaces
         public Task UpdateOrderAsync(OrderEntity item);
         public Task UpdateOrderItemsAsync(List<OrderItemEntity> items);
         public Task<List<OrderEntity>> GetAllOrdersByUserId(int userId);
+        public Task<OrderEntity> GetOrderById(int orderId);
         public Task<List<OrderEntity>> GetAllOrders();
         public Task<List<PickupPointEntity>> GetAllPickupPoints();
         public Task<PickupPointEntity> GetPickupPointById(int id);
