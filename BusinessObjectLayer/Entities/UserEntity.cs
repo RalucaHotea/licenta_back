@@ -26,7 +26,7 @@ namespace BusinessObjectLayer.Entities
         public RoleType RoleType { get; set; }
 
         [Required]
-        public float TotalBenefit { get; set; }
+        public double? TotalBenefit { get; set; }
 
         public string Group { get; set; }
     }

@@ -17,13 +17,14 @@ namespace BusinessLogicLayer.Services
     {
         private readonly IOrderRepository orderRepository;
         private readonly IProductWarehouseMappingRepository productWarehouseMappingRepository;
-
+        private readonly IUserService userService;
         private readonly IMapper mapper;
 
-        public OrderService(IOrderRepository _orderRepository, IProductWarehouseMappingRepository _productWarehouseMappingRepository, IMapper _mapper)
+        public OrderService(IOrderRepository _orderRepository, IProductWarehouseMappingRepository _productWarehouseMappingRepository, IUserService _userService, IMapper _mapper)
         {
             orderRepository = _orderRepository;
             productWarehouseMappingRepository = _productWarehouseMappingRepository;
+            userService = _userService;
             mapper = _mapper;
         }
 
@@ -62,6 +63,10 @@ namespace BusinessLogicLayer.Services
                     await productWarehouseMappingRepository.UpdateStock(stock);
                 }
             }
+
+            var customer = await userService.GetUserByIdAsync(orderDto.UserId);
+            customer.TotalBenefit = customer.TotalBenefit - orderDto.TotalPrice;
+            await userService.UpdateUserAsync(customer);
 
             orderDto.Items = orderItemsEntities;
             

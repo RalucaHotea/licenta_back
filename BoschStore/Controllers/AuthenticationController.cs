@@ -42,7 +42,6 @@ namespace CIPTool.Controllers
             {
                 return Ok(user);
             }
-
             var group = LdapWrapper.GetDepartmentByUserName(currentUser);
 
             loggedUser = new UserDto
@@ -52,6 +51,38 @@ namespace CIPTool.Controllers
                 Email = LdapWrapper.GetEmailAddressByUserName(currentUser),
                 RoleType = RoleType.Associate,
                 Group = group,
+                TotalBenefit = 3000
+            };
+
+            await userService.AddUserAsync(loggedUser);
+
+            return Ok(loggedUser);
+        }
+
+        [DisableCors]
+        [AllowAnonymous]
+        [HttpGet("loginTest")]
+        public async Task<IActionResult> LoginTest([FromQuery] string currentUsernameTest)
+        {
+
+            UserDto loggedUser;
+            var user = await userService.GetUserByUsernameAsync(currentUsernameTest.ToUpper());
+            if (user != null)
+            {
+                return Ok(user);
+            }
+
+            var group = LdapWrapper.GetDepartmentByUserName(currentUser);
+            RoleType role;
+
+            loggedUser = new UserDto
+            {
+                Username = currentUsernameTest.ToUpper(),
+                Name = LdapWrapper.GetFirstNameByUsername(currentUsernameTest.ToUpper()) + " " + LdapWrapper.GetLastNameByUsername(currentUsernameTest.ToUpper()),
+                Email = LdapWrapper.GetEmailAddressByUserName(currentUsernameTest.ToUpper()),
+                RoleType = RoleType.Associate,
+                Group = group,
+                TotalBenefit = 3000
             };
 
             await userService.AddUserAsync(loggedUser);

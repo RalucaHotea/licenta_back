@@ -23,10 +23,21 @@ namespace BusinessLogicLayer.Services
             await userRepository.AddUserAsync(_mapper.Map<UserDto, UserEntity>(user));
         }
 
+        public async Task<UserDto> GetUserByIdAsync(int userId)
+        {
+            var user = await userRepository.GetUserByIdAsync(userId);
+            return _mapper.Map<UserEntity, UserDto>(user);
+        }
+
         public async Task<UserDto> GetUserByUsernameAsync(string username)
         {
             var user = await userRepository.GetUserByUsernameAsync(username);
             return _mapper.Map<UserEntity, UserDto>(user);
+        }
+
+        public async Task UpdateUserAsync(UserDto user)
+        {
+            await userRepository.UpdateUserAsync(_mapper.Map<UserDto, UserEntity>(user));
         }
     }
 }

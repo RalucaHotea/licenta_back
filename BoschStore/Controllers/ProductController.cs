@@ -189,6 +189,7 @@ namespace BoschStore.Controllers
                     Directory.CreateDirectory(pathToSave);
                 }
 
+                //file != null 
                 if (file.Length > 0)
                 {
                     var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');

@@ -30,6 +30,8 @@ namespace BoschStore
 
         public static string GetDepartmentByUserName(string userName)
             => GetUserProperty(userName, "SAMAccountName", "department");
+        public static string GetGroupByUserName(string userName)
+           => GetUserProperty(userName, "SAMAccountName", "group");
 
         public static string GetCountryByUserName(string userName)
             => GetUserProperty(userName, "SAMAccountName", "co");
