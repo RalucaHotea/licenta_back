@@ -108,6 +108,12 @@ namespace BusinessLogicLayer.Services
             return pickupPoints.Select(mapper.Map<PickupPointEntity, PickupPointDto>).ToList();
         }
 
-       
+        public async Task<List<OrderDto>> GetAllOrdersByUserOfficeLocationAsync(int userId)
+        {
+            var customer = await userService.GetUserByIdAsync(userId);
+            var orders = await orderRepository.GetAllOrdersByUserOfficeLocationAsync(mapper.Map <UserDto,UserEntity>(customer));
+            return orders.Select(mapper.Map<OrderEntity, OrderDto>)
+                .ToList();
+        }
     }
 }

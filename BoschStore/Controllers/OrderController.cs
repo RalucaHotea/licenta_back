@@ -83,6 +83,18 @@ namespace BoschStore.Controllers
         }
 
         [HttpGet]
+        [Route("GetOrdersByUserOfficeLocation")]
+        public async Task<ActionResult> GetOrdersByUserOfficeLocation([FromQuery] int userId)
+        {
+            var orders = await orderService.GetAllOrdersByUserOfficeLocationAsync(userId);
+            if (!orders.Any())
+            {
+                return NotFound();
+            }
+            return Ok(orders);
+        }
+
+        [HttpGet]
         [Route("GetAllOrders")]
         public async Task<ActionResult> GetAllOrders()
         {

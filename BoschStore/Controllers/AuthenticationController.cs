@@ -49,6 +49,9 @@ namespace CIPTool.Controllers
                 Username = currentUser,
                 Name = LdapWrapper.GetFirstNameByUsername(currentUser) + " " + LdapWrapper.GetLastNameByUsername(currentUser),
                 Email = LdapWrapper.GetEmailAddressByUserName(currentUser),
+                OfficeStreetAddress = LdapWrapper.GetOfficeStreetAddressByUserName(currentUser),
+                OfficeCity = LdapWrapper.GetOfficeCityByUserName(currentUser),
+                OfficeCountry = LdapWrapper.GetOfficeCountryByUserName(currentUser),
                 RoleType = RoleType.Associate,
                 Group = group,
                 TotalBenefit = 3000
@@ -80,6 +83,9 @@ namespace CIPTool.Controllers
                 Username = currentUsernameTest.ToUpper(),
                 Name = LdapWrapper.GetFirstNameByUsername(currentUsernameTest.ToUpper()) + " " + LdapWrapper.GetLastNameByUsername(currentUsernameTest.ToUpper()),
                 Email = LdapWrapper.GetEmailAddressByUserName(currentUsernameTest.ToUpper()),
+                OfficeStreetAddress = LdapWrapper.GetOfficeStreetAddressByUserName(currentUsernameTest.ToUpper()),
+                OfficeCity = LdapWrapper.GetOfficeCityByUserName(currentUsernameTest.ToUpper()),
+                OfficeCountry = LdapWrapper.GetOfficeCountryByUserName(currentUsernameTest.ToUpper()),
                 RoleType = RoleType.Associate,
                 Group = group,
                 TotalBenefit = 3000

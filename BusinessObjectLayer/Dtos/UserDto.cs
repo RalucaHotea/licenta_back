@@ -17,5 +17,11 @@ namespace BusinessObjectLayer.Dtos
         public double? TotalBenefit { get; set; }
 
         public string Group { get; set; }
+
+        public string OfficeStreetAddress { get; set; }
+
+        public string OfficeCity { get; set; }
+
+        public string OfficeCountry { get; set; }
     }
 }
