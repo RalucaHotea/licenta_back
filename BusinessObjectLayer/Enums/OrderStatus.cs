@@ -9,7 +9,7 @@ namespace BusinessObjectLayer.Enums
     public enum OrderStatus
     {
         InSubmission = 1,
-        Approved = 2,
+        Delivered = 2,
         Sent = 3,
         Complete = 4
     }

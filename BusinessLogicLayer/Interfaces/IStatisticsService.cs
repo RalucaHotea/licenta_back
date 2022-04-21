@@ -14,5 +14,6 @@ namespace BusinessLogicLayer.Interfaces
         int GetInSubmissionOrdersNumber(ICollection<OrderDto> allOrders);
         int GetShippedOrdersNumber(ICollection<OrderDto> allOrders);
         int GetCompleteOrdersNumber(ICollection<OrderDto> allOrders);
+        Task<List<MonthlyStatisticsDto>> GetMonthlyStatistics(int year);
     }
 }

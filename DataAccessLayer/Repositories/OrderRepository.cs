@@ -1,4 +1,5 @@
 ﻿using BusinessObjectLayer.Entities;
+using BusinessObjectLayer.Enums;
 using DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -64,7 +65,8 @@ namespace DataAccessLayer.Repositories
 
         public async Task<List<OrderEntity>> GetAllOrdersByUserOfficeLocationAsync(UserEntity customer)
         {
-            return await dbContext.Orders.Where(x => x.PickupPoint.StreetAddress == customer.OfficeStreetAddress && x.PickupPoint.City == customer.OfficeCity && x.PickupPoint.Country == customer.OfficeCountry).ToListAsync();
+
+            return await dbContext.Orders.Where(x => x.PickupPoint.StreetAddress == customer.OfficeStreetAddress && x.PickupPoint.City == customer.OfficeCity && x.PickupPoint.Country == customer.OfficeCountry && (x.Status == OrderStatus.Sent || x.Status == OrderStatus.Delivered)).Include(x => x.User).Include(x => x.Items).ThenInclude(x => x.Product).ToListAsync();
         }
     }
 }

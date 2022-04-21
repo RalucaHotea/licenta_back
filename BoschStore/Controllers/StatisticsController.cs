@@ -35,5 +35,19 @@ namespace BoschStore.Controllers
 
             return Ok(statistics);
         }
+
+        [HttpGet]
+        [Route("GetMonthlyStatistics")]
+        public async Task<IActionResult> GetMonthlyStatistics([FromQuery] int year)
+        {
+            var statistics = await statisticsService.GetMonthlyStatistics(year);
+
+            if (statistics == null)
+            {
+                return BadRequest("No statistics could be generated.");
+            }
+
+            return Ok(statistics);
+        }
     }
 }

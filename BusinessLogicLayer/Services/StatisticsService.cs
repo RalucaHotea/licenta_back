@@ -38,6 +38,31 @@ namespace BusinessLogicLayer.Services
                 ShippedOrdersNumber = GetShippedOrdersNumber(allOrders),
             };
         }
+        public async Task<List<MonthlyStatisticsDto>> GetMonthlyStatistics(int year)
+        {
+            var allOrders = await orderService.GetAllOrdersAsync();
+            var filteredOrders = allOrders.Where(x => (x.Status == OrderStatus.Complete)).ToList();
+            var totalMonthlyStatistics = new List<MonthlyStatisticsDto>();
+            var lastDate = new DateTime(year, 12, 31);
+            var targetDate = new DateTime(year, 1, 1);
+            while (targetDate <= lastDate)
+            {
+                var ideas = filteredOrders
+                    .Where(x => ((x.PickupDate ?? default).Month.Equals(targetDate.Month)
+                                 && (x.PickupDate ?? default).Year.Equals(targetDate.Year)))
+                    .ToList();
+                var monthData = new MonthlyStatisticsDto
+                {
+                    CompleteOrdersCount = ideas.Count(x => (x.PickupDate ?? default).Month.Equals(targetDate.Month)
+                                 && (x.PickupDate ?? default).Year.Equals(targetDate.Year) && (x.Status == OrderStatus.Complete)),
+                   
+                    Date = targetDate
+                };
+                totalMonthlyStatistics.Add(monthData);
+                targetDate = targetDate.AddMonths(1);
+            }
+            return totalMonthlyStatistics;
+        }
 
         public int GetShippedOrdersNumber(ICollection<OrderDto> allOrders)
         {
