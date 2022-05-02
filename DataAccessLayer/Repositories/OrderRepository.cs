@@ -59,7 +59,7 @@ namespace DataAccessLayer.Repositories
 
         public async Task<OrderEntity> GetOrderById(int orderId)
         {
-            var order = await dbContext.Orders.Where(x => x.Id == orderId).Include(x => x.User).Include(x => x.Items).ThenInclude(x => x.Product).FirstOrDefaultAsync();
+            var order = await dbContext.Orders.Where(x => x.Id == orderId).Include(x => x.User).Include(x => x.Items).ThenInclude(x => x.Product).AsNoTracking().FirstOrDefaultAsync();
             return order;
         }
 
@@ -68,5 +68,17 @@ namespace DataAccessLayer.Repositories
 
             return await dbContext.Orders.Where(x => x.PickupPoint.StreetAddress == customer.OfficeStreetAddress && x.PickupPoint.City == customer.OfficeCity && x.PickupPoint.Country == customer.OfficeCountry && (x.Status == OrderStatus.Sent || x.Status == OrderStatus.Delivered)).Include(x => x.User).Include(x => x.Items).ThenInclude(x => x.Product).ToListAsync();
         }
+
+        public async Task<List<OrderItemEntity>> GetAllOrderItemsByProductId(int productId)
+        {
+            return await dbContext.OrderItems.Where(x => x.ProductId == productId).Include(x => x.Product).Include(x => x.Order).ThenInclude(x => x.User).AsNoTracking().ToListAsync();
+        }
+
+        public async Task DeleteOrderItemAsync(OrderItemEntity item)
+        {
+            dbContext.OrderItems.Remove(item);
+            await dbContext.SaveChangesAsync();
+        }
+
     }
 }

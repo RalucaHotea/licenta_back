@@ -26,6 +26,7 @@ namespace BusinessLogicLayer.Services
             {
                 message.To.Add(new MailAddress("fixed-term.Georgiana.Hotea@ro.bosch.com"));
                 message.From = new MailAddress(emailConfiguration.From);
+                message.Subject = email.Subject;
                 message.IsBodyHtml = true;
                 AlternateView htmlView = AlternateView.CreateAlternateViewFromString(email.MessageTemplate, new System.Net.Mime.ContentType("text/html"));
                 message.AlternateViews.Add(htmlView);
@@ -39,8 +40,6 @@ namespace BusinessLogicLayer.Services
                     smtp.Host = emailConfiguration.Host;
                     smtp.Port = Convert.ToInt32(emailConfiguration.Port);
                     smtp.EnableSsl = true;
-
-
                     await smtp.SendMailAsync(message);
                     isEmailSend = true;
                 }
