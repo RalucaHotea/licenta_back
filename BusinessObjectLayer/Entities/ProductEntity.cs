@@ -15,8 +15,6 @@ namespace BusinessObjectLayer.Entities
 
         public string EanCode { get; set; }
 
-        public int? MinimumQuantity { get; set; }
-
         [ForeignKey("Categories")]
         public int CategoryId { get; set; }
 

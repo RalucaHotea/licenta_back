@@ -15,5 +15,6 @@ namespace DataAccessLayer.Interfaces
         public Task<ProductWarehouseMapping> GetAllAvailableStocksByProductId(int productId, int quantity);
         public Task<ProductWarehouseMapping> GetProductStockByCountryAndProductId(int productId, string country);
         public Task<int> GetProductStockCountByProductId(int productId);
+        public Task<ProductWarehouseMapping> GetProductStockByProductAndWarehouseId(int productId, int warehouseId);
     }
 }

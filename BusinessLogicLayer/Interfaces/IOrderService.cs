@@ -12,6 +12,7 @@ namespace BusinessLogicLayer.Interfaces
     {
         public Task CreateOrderAsync(AddOrderDto orderToAdd);
         public Task UpdateOrderAsync(OrderDto orderToUpdate);
+        public Task DeleteOrderAsync(int orderId);
         public Task<List<OrderDto>> GetAllOrdersByUserIdAsync(int userId);
         public Task<List<OrderDto>> GetAllOrdersByUserOfficeLocationAsync(int userId);
         public Task<List<OrderDto>> GetAllOrdersAsync();

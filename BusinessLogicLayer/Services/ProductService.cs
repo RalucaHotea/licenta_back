@@ -109,6 +109,22 @@ namespace BusinessLogicLayer.Services
 
         public async Task UpdateProductAsync(ProductDto productToUpdate)
         {
+            var warehouse = await productWarehouseMappingRepository.GetProductStockByProductAndWarehouseId(productToUpdate.Id, productToUpdate.WarehouseId);   
+            if(warehouse != null)
+            {
+                warehouse.Quantity = warehouse.Quantity + productToUpdate.Quantity;
+                await productWarehouseMappingRepository.UpdateStock(warehouse);
+            }else
+            {
+                var productStock = new ProductWarehouseMapping
+                {
+                    ProductId = productToUpdate.Id,
+                    WarehouseId = productToUpdate.WarehouseId,
+                    Quantity = productToUpdate.Quantity,
+                };
+                await productWarehouseMappingRepository.CreateProductWarehouseMapping(productStock);
+            }
+           
             await productRepository.UpdateProductAsync(mapper.Map<ProductDto, ProductEntity>(productToUpdate));
         }
 

@@ -10,6 +10,7 @@ namespace DataAccessLayer.Interfaces
     public interface IOrderRepository
     {
         public Task<int> CreateOrder(OrderEntity item);
+        public Task DeleteOrder(OrderEntity item);
         public Task UpdateOrderAsync(OrderEntity item);
         public Task UpdateOrderItemsAsync(List<OrderItemEntity> items);
         public Task<List<OrderEntity>> GetAllOrdersByUserOfficeLocationAsync(UserEntity customer);

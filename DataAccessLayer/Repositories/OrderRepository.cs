@@ -80,5 +80,10 @@ namespace DataAccessLayer.Repositories
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task DeleteOrder(OrderEntity order)
+        {
+            dbContext.Orders.Remove(order);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

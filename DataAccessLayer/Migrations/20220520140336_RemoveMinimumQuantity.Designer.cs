@@ -4,14 +4,16 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(BoschStoreContext))]
-    partial class BoschStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20220520140336_RemoveMinimumQuantity")]
+    partial class RemoveMinimumQuantity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -225,7 +227,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subcategories");
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("BusinessObjectLayer.Entities.UserEntity", b =>

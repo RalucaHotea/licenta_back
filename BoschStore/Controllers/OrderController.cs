@@ -57,6 +57,14 @@ namespace BoschStore.Controllers
             return Ok();
         }
 
+        [HttpDelete]
+        [Route("DeleteOrder")]
+        public async Task<ActionResult> DeleteOrder([FromQuery] int orderId)
+        {
+            await orderService.DeleteOrderAsync(orderId);
+            return Ok();
+        }
+
         [HttpGet]
         [Route("GetOrdersByUserId")]
         public async Task<ActionResult> GetOrdersByUserId([FromQuery] int userId)

@@ -43,6 +43,12 @@ namespace BusinessLogicLayer.Services
 
         }
 
+        public async Task<ProductWarehouseDto> GetProductStockByProductAndWarehouseId(int productId, int warehouseId)
+        {
+            var stock = await productWarehouseRepository.GetProductStockByProductAndWarehouseId(productId, warehouseId);
+            return mapper.Map<ProductWarehouseMapping, ProductWarehouseDto>(stock);
+        }
+
         public async Task<List<WarehouseDto>> GetAllWarehousesAsync()
         {
             var warehouses = await warehouseRepository.GetAllWarehouses();

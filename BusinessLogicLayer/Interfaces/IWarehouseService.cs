@@ -12,6 +12,7 @@ namespace BusinessLogicLayer.Interfaces
         public Task<List<ProductWarehouseDto>> GetAllStocksAsync();
         public Task<List<WarehouseDto>> GetAllWarehousesAsync();
         public Task<List<ProductWarehouseDto>> GetAllProductStocksByIdAsync(int productId);
+        public Task<ProductWarehouseDto> GetProductStockByProductAndWarehouseId(int productId, int warehouseId);
         public Task<int> GetProductStockCountByIdAsync(int productId);
     }
 }

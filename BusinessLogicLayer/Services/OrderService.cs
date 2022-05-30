@@ -75,6 +75,7 @@ namespace BusinessLogicLayer.Services
 
         public async Task UpdateOrderAsync(OrderDto orderToUpdate)
         {
+
             await orderRepository.UpdateOrderAsync(mapper.Map<OrderDto, OrderEntity>(orderToUpdate));
         }
 
@@ -116,6 +117,13 @@ namespace BusinessLogicLayer.Services
                 .ToList();
         }
 
-        
+        public async Task DeleteOrderAsync(int orderId)
+        {
+            var orderToDelete = await orderRepository.GetOrderById(orderId);
+            if (orderToDelete != null)
+            {
+                await orderRepository.DeleteOrder(orderToDelete);
+            }
+        }
     }
 }

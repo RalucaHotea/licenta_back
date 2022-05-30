@@ -46,6 +46,12 @@ namespace DataAccessLayer.Repositories
             return stockCount;
         }
 
+        public async Task<ProductWarehouseMapping> GetProductStockByProductAndWarehouseId(int productId, int warehouseId)
+        {
+            var stock = await dbContext.ProductWarehouseMapping.Where(x => x.ProductId == productId && x.WarehouseId == warehouseId).AsNoTracking().FirstOrDefaultAsync();
+            return stock;
+        }
+
         public async Task UpdateStock(ProductWarehouseMapping productWarehouseMapping)
         {
 
