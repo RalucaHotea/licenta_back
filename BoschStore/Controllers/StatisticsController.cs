@@ -24,9 +24,9 @@ namespace BoschStore.Controllers
 
         [HttpGet]
         [Route("GetOverviewOrdersStatistics")]
-        public async Task<IActionResult> GetOverviewOrdersStatistics()
+        public async Task<IActionResult> GetOverviewOrdersPerYearStatistics([FromQuery] int year)
         {
-            var statistics = await statisticsService.GetProductsStatisticsDto();
+            var statistics = await statisticsService.GetProductsStatisticsPerYear(year);
 
             if (statistics == null)
             {

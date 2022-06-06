@@ -9,7 +9,7 @@ namespace BusinessLogicLayer.Interfaces
 {
     public interface IStatisticsService
     {
-        Task<OrdersStatisticsDto> GetProductsStatisticsDto();
+        Task<OrdersStatisticsDto> GetProductsStatisticsPerYear(int year);
         int GetTotalOrdersNumber(ICollection<OrderDto> allOrders);
         int GetInSubmissionOrdersNumber(ICollection<OrderDto> allOrders);
         int GetShippedOrdersNumber(ICollection<OrderDto> allOrders);

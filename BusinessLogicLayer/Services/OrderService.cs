@@ -36,8 +36,7 @@ namespace BusinessLogicLayer.Services
             var items = orderToAdd.Items;
             orderDto.TotalPrice = 0;
             orderDto.Status = OrderStatus.InSubmission;
-            
-
+           
             foreach ( CartItemEntity cartItem in items)
             {
                 orderDto.TotalPrice += cartItem.Product.Price * cartItem.Quantity;
@@ -120,9 +119,13 @@ namespace BusinessLogicLayer.Services
         public async Task DeleteOrderAsync(int orderId)
         {
             var orderToDelete = await orderRepository.GetOrderById(orderId);
-            if (orderToDelete != null)
+            var pickupPoint = await orderRepository.GetPickupPointById(orderToDelete.PickupPointId);
+
+            foreach (OrderItemEntity orderItem in orderToDelete.Items)
             {
-                await orderRepository.DeleteOrder(orderToDelete);
+                var stock = await productWarehouseMappingRepository.GetProductStockByProductId(orderItem.ProductId);
+                stock.Quantity = stock.Quantity + orderItem.Quantity;
+                await productWarehouseMappingRepository.UpdateStock(stock);
             }
         }
     }

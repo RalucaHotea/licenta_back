@@ -10,7 +10,7 @@ namespace BusinessObjectLayer.Enums
     {
         InSubmission = 1,
         Delivered = 2,
-        Sent = 3,
+        Shipped = 3,
         Complete = 4
     }
 }
