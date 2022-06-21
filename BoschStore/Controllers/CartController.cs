@@ -94,7 +94,7 @@ namespace BoschStore.Controllers
         [Route("ClearCartByUserId")]
         public async Task<IActionResult> ClearCartByUserId([FromQuery] int userId)
         {
-            await cartService.DeleteCartItemAsync(userId);
+            await cartService.DeleteCartItemsByUserId(userId);
             return Ok();
         }
     }

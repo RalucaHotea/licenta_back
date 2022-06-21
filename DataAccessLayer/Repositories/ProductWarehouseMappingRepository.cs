@@ -27,10 +27,15 @@ namespace DataAccessLayer.Repositories
 
         public async Task<List<ProductWarehouseMapping>> GetAllStocks()
         {
-            return await dbContext.ProductWarehouseMapping.AsNoTracking().ToListAsync(); 
+            return await dbContext.ProductWarehouseMapping.Include(x => x.Product).Include(x => x.Warehouse).AsNoTracking().ToListAsync(); 
         }
 
-        public async Task<int> GetAllStocksByProductId(int productId)
+        public async Task<ProductWarehouseMapping> GetAllAvailableStocksByProductId(int productId, int quantity)
+        {
+            return await dbContext.ProductWarehouseMapping.Where(x => x.ProductId == productId && x.Quantity >= quantity).Include(x => x.Warehouse).AsNoTracking().FirstOrDefaultAsync();
+        }
+
+        public async Task<int> GetProductStockCountByProductId(int productId)
         {
             var stocks = await dbContext.ProductWarehouseMapping.Where(x => x.ProductId == productId).AsNoTracking().ToListAsync();
             var stockCount = 0;
@@ -39,6 +44,32 @@ namespace DataAccessLayer.Repositories
                 stockCount = stockCount + stock.Quantity;
             }
             return stockCount;
+        }
+
+
+        public async Task<ProductWarehouseMapping> GetProductStockByProductAndWarehouseId(int productId, int warehouseId)
+        {
+            var stock = await dbContext.ProductWarehouseMapping.Where(x => x.ProductId == productId && x.WarehouseId == warehouseId).AsNoTracking().FirstOrDefaultAsync();
+            return stock;
+        }
+
+        public async Task<ProductWarehouseMapping> GetProductStockByProductId(int productId)
+        {
+            var stock = await dbContext.ProductWarehouseMapping.Where(x => x.ProductId == productId).AsNoTracking().FirstOrDefaultAsync();
+            return stock;
+        }
+
+        public async Task UpdateStock(ProductWarehouseMapping productWarehouseMapping)
+        {
+
+            dbContext.ProductWarehouseMapping.Update(productWarehouseMapping);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<ProductWarehouseMapping> GetProductStockByCountryAndProductId(int productId, string country)
+        {
+            return await dbContext.ProductWarehouseMapping.Where(x => x.ProductId == productId && x.Warehouse.Country == country).AsNoTracking().FirstOrDefaultAsync();
+
         }
     }
 }

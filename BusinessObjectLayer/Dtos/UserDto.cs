@@ -14,9 +14,14 @@ namespace BusinessObjectLayer.Dtos
 
         public RoleType RoleType { get; set; }
 
-        public float TotalBenefit { get; set; }
+        public double? TotalBenefit { get; set; }
 
         public string Group { get; set; }
 
+        public string OfficeStreetAddress { get; set; }
+
+        public string OfficeCity { get; set; }
+
+        public string OfficeCountry { get; set; }
     }
 }

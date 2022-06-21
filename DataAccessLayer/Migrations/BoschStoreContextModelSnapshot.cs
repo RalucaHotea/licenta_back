@@ -70,7 +70,19 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("BillNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("PickupDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("PickupPointId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ReceivingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ShippingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("SubmittedAt")
@@ -83,6 +95,8 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PickupPointId");
 
                     b.HasIndex("UserId");
 
@@ -121,10 +135,16 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Location")
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -150,9 +170,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MinimumQuantity")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -208,7 +225,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SubCategories");
+                    b.ToTable("Subcategories");
                 });
 
             modelBuilder.Entity("BusinessObjectLayer.Entities.UserEntity", b =>
@@ -231,11 +248,21 @@ namespace DataAccessLayer.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
+                    b.Property<string>("OfficeCity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OfficeCountry")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OfficeStreetAddress")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("RoleType")
                         .HasColumnType("int");
 
-                    b.Property<float>("TotalBenefit")
-                        .HasColumnType("real");
+                    b.Property<double?>("TotalBenefit")
+                        .IsRequired()
+                        .HasColumnType("float");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -254,7 +281,10 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Location")
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -278,11 +308,19 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("BusinessObjectLayer.Entities.OrderEntity", b =>
                 {
+                    b.HasOne("BusinessObjectLayer.Entities.PickupPointEntity", "PickupPoint")
+                        .WithMany()
+                        .HasForeignKey("PickupPointId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BusinessObjectLayer.Entities.UserEntity", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PickupPoint");
 
                     b.Navigation("User");
                 });

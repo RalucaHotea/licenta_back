@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BusinessObjectLayer.Entities
 {
-	[Table("SubCategories")]
+	[Table("Subcategories")]
 	public class SubcategoryEntity
 	{
 		[Key]

@@ -36,15 +36,28 @@ namespace BusinessLogicLayer.Services
         
         }
 
+        public async Task<List<ProductWarehouseDto>> GetAllProductStocksByIdAsync(int productId)
+        {
+            var stock = await productWarehouseRepository.GetAllStocks();
+            return stock.Where(x => x.ProductId == productId).Select(mapper.Map<ProductWarehouseMapping, ProductWarehouseDto>).ToList();
+
+        }
+
+        public async Task<ProductWarehouseDto> GetProductStockByProductAndWarehouseId(int productId, int warehouseId)
+        {
+            var stock = await productWarehouseRepository.GetProductStockByProductAndWarehouseId(productId, warehouseId);
+            return mapper.Map<ProductWarehouseMapping, ProductWarehouseDto>(stock);
+        }
+
         public async Task<List<WarehouseDto>> GetAllWarehousesAsync()
         {
             var warehouses = await warehouseRepository.GetAllWarehouses();
             return warehouses.Select(mapper.Map<WarehouseEntity, WarehouseDto>).ToList();
         }
 
-        public async Task<int> GetProductStockByIdAsync(int productId)
+        public async Task<int> GetProductStockCountByIdAsync(int productId)
         {
-            return await productWarehouseRepository.GetAllStocksByProductId(productId);
+            return await productWarehouseRepository.GetProductStockCountByProductId(productId);
         }
     }
 }

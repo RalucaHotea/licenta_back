@@ -7,5 +7,7 @@ namespace BusinessLogicLayer.Interfaces
     {
         public Task<UserDto> GetUserByUsernameAsync(string username);
         public Task AddUserAsync(UserDto user);
+        public Task<UserDto> GetUserByIdAsync(int userId);
+        public Task UpdateUserAsync(UserDto user);
     }
 }

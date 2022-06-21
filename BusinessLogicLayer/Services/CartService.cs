@@ -75,5 +75,14 @@ namespace BusinessLogicLayer.Services
                 .Select(mapper.Map<CartItemEntity, CartItemDto>)
                 .ToList();
         }
+
+        public async Task DeleteCartItemsByUserId(int userId)
+        {
+            var items = await cartItemRepository.GetCartItemsByUserIdAsync(userId);
+            if (items.Any())
+            {
+                await cartItemRepository.DeleteCartItems(items);
+            }
+        }
     }
 }

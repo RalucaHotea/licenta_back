@@ -2,6 +2,7 @@
 using BusinessLogicLayer.Interfaces;
 using BusinessObjectLayer.Dtos;
 using BusinessObjectLayer.Entities;
+using BusinessObjectLayer.Enums;
 using DataAccessLayer.Interfaces;
 using System.Collections.Generic;
 using System.IO;
@@ -16,13 +17,19 @@ namespace BusinessLogicLayer.Services
         private readonly IProductRepository productRepository;
         private readonly IProductWarehouseMappingRepository productWarehouseMappingRepository;
         private readonly ICartItemRepository cartItemRepository;
+        private readonly IOrderRepository orderRepository;
+        private readonly IEmailService emailService;
+        private readonly IProductWarehouseMappingRepository warehouseMappingRepository;
         private readonly IMapper mapper;
 
-        public ProductService(IProductRepository _productRepository, IProductWarehouseMappingRepository _productWarehouseMappingRepository, ICartItemRepository _cartItemRepository, IMapper _mapper)
+        public ProductService(IProductRepository _productRepository, IProductWarehouseMappingRepository _productWarehouseMappingRepository, ICartItemRepository _cartItemRepository, IProductWarehouseMappingRepository _warehouseRepository, IOrderRepository _orderRepository, IEmailService _emailService, IMapper _mapper)
         {
             productRepository = _productRepository;
+            orderRepository = _orderRepository;
             productWarehouseMappingRepository = _productWarehouseMappingRepository;
             cartItemRepository = _cartItemRepository;
+            warehouseMappingRepository = _warehouseRepository;
+            emailService = _emailService;
             mapper = _mapper;
         }
 
@@ -83,8 +90,44 @@ namespace BusinessLogicLayer.Services
                 .ToList();
         }
 
+        public async Task<List<ProductDto>> GetAllAvailableProductsAsync()
+        {
+            var products = await productRepository.GetAllProducts();
+            var availableProducts = new List<ProductEntity>();
+            foreach (var product in products)
+            {
+                var productStock = await productWarehouseMappingRepository.GetProductStockCountByProductId(product.Id);
+                if (productStock != 0)
+                {
+                    availableProducts.Add(product);
+                }
+            }
+            return availableProducts
+                .Select(mapper.Map<ProductEntity, ProductDto>)
+                .ToList();
+        }
+
         public async Task UpdateProductAsync(ProductDto productToUpdate)
         {
+            if(productToUpdate.WarehouseId != 0)
+            {
+                var warehouse = await productWarehouseMappingRepository.GetProductStockByProductAndWarehouseId(productToUpdate.Id, productToUpdate.WarehouseId);
+                if (warehouse != null)
+                {
+                    warehouse.Quantity = warehouse.Quantity + productToUpdate.Quantity;
+                    await productWarehouseMappingRepository.UpdateStock(warehouse);
+                }
+                else
+                {
+                    var productStock = new ProductWarehouseMapping
+                    {
+                        ProductId = productToUpdate.Id,
+                        WarehouseId = productToUpdate.WarehouseId,
+                        Quantity = productToUpdate.Quantity,
+                    };
+                    await productWarehouseMappingRepository.CreateProductWarehouseMapping(productStock);
+                }
+            }
             await productRepository.UpdateProductAsync(mapper.Map<ProductDto, ProductEntity>(productToUpdate));
         }
 
@@ -113,6 +156,24 @@ namespace BusinessLogicLayer.Services
                     foreach( var item in cartItems)
                     {
                        await cartItemRepository.DeleteCartItem(item);
+                    }
+                }
+                var orderItems = await orderRepository.GetAllOrderItemsByProductId(productId);
+                if (orderItems.Any())
+                {
+                    foreach (var item in orderItems)
+                    {
+                        await orderRepository.DeleteOrderItemAsync(item);
+                        if(item.Order.Status == OrderStatus.InSubmission)
+                        {
+                            var email = new EmailDetailsDto
+                            {
+                                Receiver = item.Order.User.Email,
+                                MessageTemplate = item.Product.Name + "is not available anymore.We are so sorry",
+                                Subject = "Product Unavailable"
+                            };
+                            await emailService.SendEmailAsync(email);
+                        }
                     }
                 }
                 await productRepository.DeleteProductAsync(productToDelete);

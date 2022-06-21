@@ -3,6 +3,7 @@
     public enum RoleType
     {
         Associate = 1,
-        Admin = 2
+        Admin = 2,
+        LogisticsResp = 3,
     }
 }

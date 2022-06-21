@@ -14,6 +14,7 @@ namespace BusinessLogicLayer.Interfaces
         public Task<ICollection<CartItemDto>> GetCartItemsByUserIdAsync(int userId);
         public Task<ICollection<CartItemDto>> GetItemsByProductIdAsync(int productId);
         public Task UpdateCartItemAsync(CartItemDto itemToUpdate);
+        public Task DeleteCartItemsByUserId(int userId);
         public Task DeleteCartItemAsync(int itemId);
     }
 }

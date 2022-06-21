@@ -37,6 +37,11 @@ namespace BoschStore
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            var emailConfiguration = Configuration
+              .GetSection("EmailConfiguration")
+              .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfiguration);
+
             services.AddControllers()
                     .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -61,6 +66,8 @@ namespace BoschStore
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IWarehouseService, WarehouseService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IStatisticsService, StatisticsService>();
 
             services.AddMvcCore();
 

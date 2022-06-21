@@ -20,11 +20,23 @@ namespace DataAccessLayer.Repositories
             await dbContext.SaveChangesAsync();
         }
 
+        public Task<UserEntity> GetUserByIdAsync(int userId)
+        {
+            return dbContext.Users.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == userId);
+        }
+
         public Task<UserEntity> GetUserByUsernameAsync(string username)
         {
             return dbContext.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Username == username);
+        }
+
+        public async Task UpdateUserAsync(UserEntity user)
+        {
+            dbContext.Users.Update(user);
+            await dbContext.SaveChangesAsync();
         }
     }
 }

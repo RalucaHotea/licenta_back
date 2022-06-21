@@ -22,6 +22,15 @@ namespace BoschStore
         public static string GetDisplayNameByUserName(string userName)
             => GetUserProperty(userName, "SAMAccountName", "DisplayName");
 
+        public static string GetOfficeStreetAddressByUserName(string officeStreetAddress)
+            => GetUserProperty(officeStreetAddress, "SAMAccountName", "streetAddress");
+
+        public static string GetOfficeCountryByUserName(string officeCountryAdress)
+            => GetUserProperty(officeCountryAdress, "SAMAccountName", "st");
+
+        public static string GetOfficeCityByUserName(string officeCityAddress)
+            => GetUserProperty(officeCityAddress, "SAMAccountName", "l");
+
         public static string GetUserNameByDisplayName(string displayName)
             => GetUserProperty(displayName, "DisplayName", "SAMAccountName");
 
@@ -30,6 +39,8 @@ namespace BoschStore
 
         public static string GetDepartmentByUserName(string userName)
             => GetUserProperty(userName, "SAMAccountName", "department");
+        public static string GetGroupByUserName(string userName)
+           => GetUserProperty(userName, "SAMAccountName", "group");
 
         public static string GetCountryByUserName(string userName)
             => GetUserProperty(userName, "SAMAccountName", "co");

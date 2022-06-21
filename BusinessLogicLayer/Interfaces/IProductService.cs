@@ -11,6 +11,7 @@ namespace BusinessLogicLayer.Interfaces
         public Task UpdateProductAsync(ProductDto product);
         public Task DeleteProductAsync(int productId);
         public Task<List<ProductDto>> GetAllProductsAsync();
+        public Task<List<ProductDto>> GetAllAvailableProductsAsync();
         public Task<List<ProductDto>> GetProductsByCategoryIdAsync(int categoryId);
         public Task<List<ProductDto>> GetProductsBySubcategoryIdAsync(int subcategoryId);
         public Task<List<CategoryDto>> GetAllCategoriesAsync();

@@ -16,9 +16,13 @@ namespace BusinessObjectLayer.Dtos
         public string ApprovalNumber { get; set; }
         public string BillNumber { get; set; }
         public DateTime? SubmittedAt { get; set; }
+        public DateTime? ShippingDate { get; set; }
+        public DateTime? ReceivingDate { get; set; }
+        public DateTime? PickupDate { get; set; }
         public int PickupPointId { get; set; }
         public double? TotalPrice { get; set; }
         public virtual UserDto User { get; set; }
+        public virtual PickupPointDto PickupPoint { get; set; }
         public virtual List<OrderItemEntity> Items { get; set; }
     }
 }
