@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Resources\Images\bormasina\**" />
+    <Content Remove="Resources\Images\bormasina\**" />
+    <EmbeddedResource Remove="Resources\Images\bormasina\**" />
+    <None Remove="Resources\Images\bormasina\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Controllers\HomeController.cs" />
     <Compile Remove="Controllers\UserController.cs" />
     <Compile Remove="Controllers\ValuesController.cs" />
@@ -27,11 +34,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogicLayer\BusinessLogicLayer.csproj" />
     <ProjectReference Include="..\BusinessObjectLayer\BusinessObjectLayer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\Images\bormasina\bbvb\" />
-    <Folder Include="Resources\Images\bormasina\" />
   </ItemGroup>
 
 </Project>
