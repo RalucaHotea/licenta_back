@@ -127,6 +127,8 @@ namespace BusinessLogicLayer.Services
                 stock.Quantity = stock.Quantity + orderItem.Quantity;
                 await productWarehouseMappingRepository.UpdateStock(stock);
             }
+
+            orderRepository.DeleteOrder(orderToDelete);
         }
     }
 }
