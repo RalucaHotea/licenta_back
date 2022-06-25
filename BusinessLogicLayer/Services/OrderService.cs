@@ -127,6 +127,10 @@ namespace BusinessLogicLayer.Services
                 stock.Quantity = stock.Quantity + orderItem.Quantity;
                 await productWarehouseMappingRepository.UpdateStock(stock);
             }
+            var customer = await userService.GetUserByIdAsync(orderToDelete.UserId);
+            customer.TotalBenefit = customer.TotalBenefit + orderToDelete.TotalPrice;
+            await userService.UpdateUserAsync(customer);
+            await orderRepository.DeleteOrder(orderToDelete);
         }
     }
 }

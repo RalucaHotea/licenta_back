@@ -114,7 +114,15 @@ namespace BusinessLogicLayer.Services
                 var warehouse = await productWarehouseMappingRepository.GetProductStockByProductAndWarehouseId(productToUpdate.Id, productToUpdate.WarehouseId);
                 if (warehouse != null)
                 {
-                    warehouse.Quantity = warehouse.Quantity + productToUpdate.Quantity;
+                    if(productToUpdate.Quantity != 0)
+                    {
+                        warehouse.Quantity = warehouse.Quantity + productToUpdate.Quantity;
+
+                    }
+                    else
+                    {
+                        warehouse.Quantity =  0;
+                    }
                     await productWarehouseMappingRepository.UpdateStock(warehouse);
                 }
                 else
