@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BusinessObjectLayer.Entities
 {
     [Table("Warehouses")]
-
     public class WarehouseEntity
     {
         [Key]
@@ -15,6 +14,5 @@ namespace BusinessObjectLayer.Entities
         public string Country { get; set; }
 
         public string City { get; set; }
-
     }
 }

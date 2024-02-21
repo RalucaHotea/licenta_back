@@ -19,8 +19,5 @@ namespace BusinessObjectLayer.Entities
         public virtual OrderEntity Order { get; set; }
 
         public virtual ProductEntity Product { get; set; }
-       
-
-
     }
 }

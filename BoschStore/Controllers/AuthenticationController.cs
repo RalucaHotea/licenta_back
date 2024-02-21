@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using BoschStore;
 using BusinessLogicLayer.Interfaces;
 using BusinessObjectLayer.Dtos;
 using BusinessObjectLayer.Enums;
@@ -9,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-namespace CIPTool.Controllers
+namespace BoschStore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

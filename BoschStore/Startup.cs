@@ -73,7 +73,7 @@ namespace BoschStore
 
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
 
-            services.AddSwaggerGen(c =>
+            /*services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
@@ -81,21 +81,21 @@ namespace BoschStore
                     Version = "v1"
                 });
             });
-
+*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage();
-            if (env.IsDevelopment())
+           /* if (env.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Awesome API V1");
                 });
-            }
+            }*/
 
             app.UseHttpsRedirection();
 

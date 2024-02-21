@@ -21,7 +21,7 @@ namespace DataAccessLayer
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=CLJ-C-001D2; Database=BoschStore_Dev; TrustServerCertificate=True; Trusted_Connection=True;")
+            optionsBuilder.UseSqlServer("Server=CLJ-C-000X9\\SQLEXPRESS; Database=BoschStore_Dev; TrustServerCertificate=True; Trusted_Connection=True;")
                 .EnableSensitiveDataLogging();
         }
 
